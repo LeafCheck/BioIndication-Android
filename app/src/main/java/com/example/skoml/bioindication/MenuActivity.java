@@ -1,9 +1,11 @@
 package com.example.skoml.bioindication;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -11,6 +13,9 @@ import android.view.WindowManager;
 
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
+
+import io.nlopez.smartlocation.OnLocationUpdatedListener;
+import io.nlopez.smartlocation.SmartLocation;
 
 public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -27,11 +32,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+       // getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+      //  requestWindowFeature(Window.FEATURE_NO_TITLE);
+      //  getSupportActionBar().hide();
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
         setContentView(R.layout.main);
-        getSupportActionBar().hide();
+
 
         setUpMenu();
         if( savedInstanceState == null )
@@ -128,6 +136,32 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     // What good method is to access resideMenu？
     public ResideMenu getResideMenu(){
         return resideMenu;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startLocation();
+    }
+    @Override
+    protected void onStop() {
+        stopLocation();
+        super.onStop();
+    }
+
+    Location location = null;
+    private void startLocation() {
+        new SmartLocation.Builder(this).build().location().start(new OnLocationUpdatedListener() {
+            @Override
+            public void onLocationUpdated(Location location) {
+              MenuActivity.this.location = location;
+            }
+        });
+
+    }
+
+    private void stopLocation() {
+        SmartLocation.with(this).location().stop();
     }
 
 }

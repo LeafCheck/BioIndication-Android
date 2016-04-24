@@ -24,4 +24,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.specyci:residemenu:1.6+'
+    compile 'org.osmdroid:osmdroid-android:5.1@aar'
+    compile 'io.nlopez.smartlocation:library:3.2.+'
 }

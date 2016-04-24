@@ -157,12 +157,14 @@ private View  parentView;
     {
         // сохраняем полученные jpg
 
+        paramCamera.stopPreview();
         shotBtn.setVisibility(View.GONE);
         leaf.setVisibility(View.GONE);
         final ArrowDownloadButton  button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
 
         try
         {
+            /*
             File saveDir = getActivity().getCacheDir();
 
             if (!saveDir.exists())
@@ -188,7 +190,7 @@ private View  parentView;
             target.close();
             in.close();
             out.close();
-
+        */
 
             button.setVisibility(View.VISIBLE);
             button.reset();

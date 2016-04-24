@@ -2,6 +2,7 @@ package com.example.skoml.bioindication;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
 public class HistoryFragment extends Fragment {
 
     private View parentView;
@@ -18,7 +25,7 @@ public class HistoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        parentView = inflater.inflate(R.layout.calendar, container, false);
+        parentView = inflater.inflate(R.layout.history, container, false);
         listView   = (ListView) parentView.findViewById(R.id.listView);
         initView();
         return parentView;
@@ -39,25 +46,17 @@ public class HistoryFragment extends Fragment {
     }
 
     private ArrayList<String> getCalendarData(){
+        Format dateFormat= DateFormat.getDateFormat(getActivity());
+        CharSequence pattern = ((SimpleDateFormat)dateFormat).toLocalizedPattern();
+
+
         ArrayList<String> calendarList = new ArrayList<String>();
-        calendarList.add("New Year's Day");
-        calendarList.add("St. Valentine's Day");
-        calendarList.add("Easter Day");
-        calendarList.add("April Fool's Day");
-        calendarList.add("Mother's Day");
-        calendarList.add("Memorial Day");
-        calendarList.add("National Flag Day");
-        calendarList.add("Father's Day");
-        calendarList.add("Independence Day");
-        calendarList.add("Labor Day");
-        calendarList.add("Columbus Day");
-        calendarList.add("Halloween");
-        calendarList.add("All Soul's Day");
-        calendarList.add("Veterans Day");
-        calendarList.add("Thanksgiving Day");
-        calendarList.add("Election Day");
-        calendarList.add("Forefather's Day");
-        calendarList.add("Christmas Day");
+
+        for (int i =0; i < 25; i++) {
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date(c.getTime().getTime() - i * 1000 * 60 * 60*24));
+            calendarList.add(DateFormat.format(pattern,c).toString());
+        }
         return calendarList;
     }
 }
