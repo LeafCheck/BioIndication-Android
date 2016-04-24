@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/FrameLayout01"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SurfaceView
+        android:id="@+id/SurfaceView01"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </SurfaceView>
+
+    <com.fenjuly.library.ArrowDownloadButton
+        android:id="@+id/arrow_button"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_width="180dp"
+        android:layout_height="180dp" />
+
+    <ImageView
+        android:id="@+id/leaf"
+        android:layout_gravity="center"
+        android:src="@drawable/leaf"
+        android:layout_width="360dp"
+        android:layout_height="360dp" />
+
+
+
+    <Button android:text="@+id/Button01"
+        android:id="@+id/Button01"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:padding="12dp"
+        android:layout_marginTop="4dp">
+    </Button>
+</FrameLayout>
