@@ -99,6 +99,8 @@ public class ArrowDownloadButton extends View {
     private float x = 550;
     private float y = 550;
     private float radius = RADIUS;
+    float lengthX = 3 * radius / 4;
+    float lengthY = 3 * radius / 4;
     private float maxWaveHeight = MAX_WAVE_HEIGHT;
     private float minWaveHeight = MIN_WAVE_HEIGHT;
     private float textY = TEXT_Y;
@@ -118,29 +120,23 @@ public class ArrowDownloadButton extends View {
     private float arrowWidth = ARROW_WIDTH;
     private float triWidth = TRI_WIDTH;
     private float loadingWidth = LOADING_WIDTH;
-
     private Paint arrowPaint;
     private Paint arcPaint;
     private Paint smallPaint;
     private Paint triPaint;
     private Paint loadingPaint;
     private Paint textPaint;
-
     private Path arrowPath;
     private Path triPath;
     private Path textPath;
-
     private RectF oval;
-
     private Point a;
     private Point b;
     private Point c;
     private Point d;
     private Point e;
     private Point jumpPoint;
-
     private List<Point> triPoints = new ArrayList<>();
-
     private boolean isFirst = true;
     private boolean isAnimating = false;
     private boolean bezier = false;
@@ -153,8 +149,19 @@ public class ArrowDownloadButton extends View {
     private float waveHeight = MIN_WAVE_HEIGHT;
     private float progress = 0;
     private int hookCount = 0;
-    float lengthX = 3 * radius / 4;
-    float lengthY = 3 * radius / 4;
+
+    public ArrowDownloadButton(Context context) {
+        this(context, null);
+    }
+
+    public ArrowDownloadButton(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public ArrowDownloadButton(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
 
     public float getProgress() {
         return progress;
@@ -171,19 +178,6 @@ public class ArrowDownloadButton extends View {
             isLoading = false;
             isCompleted = true;
         }
-    }
-
-    public ArrowDownloadButton(Context context) {
-        this(context, null);
-    }
-
-    public ArrowDownloadButton(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public ArrowDownloadButton(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
     }
 
     @Override
@@ -401,9 +395,9 @@ public class ArrowDownloadButton extends View {
             arrowPath.moveTo(c.x, c.y);
             arrowPath.quadTo(e.x, e.y, d.x, d.y);
             canvas.drawPath(arrowPath, arrowPaint);
-        }  else if (isLoading) {
+        } else if (isLoading) {
         } else if (isCompleted) {
-        }  else if (isEnd) {
+        } else if (isEnd) {
             canvas.drawCircle(x, y, radius, loadingPaint);
             drawArrowOrHook(canvas);
         } else {

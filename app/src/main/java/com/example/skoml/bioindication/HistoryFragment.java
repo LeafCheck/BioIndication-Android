@@ -16,7 +16,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Random;
 
 public class HistoryFragment extends Fragment {
 
@@ -26,12 +25,12 @@ public class HistoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         parentView = inflater.inflate(R.layout.history, container, false);
-        listView   = (ListView) parentView.findViewById(R.id.listView);
+        listView = (ListView) parentView.findViewById(R.id.listView);
         initView();
         return parentView;
     }
 
-    private void initView(){
+    private void initView() {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
@@ -45,17 +44,17 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-    private ArrayList<String> getCalendarData(){
-        Format dateFormat= DateFormat.getDateFormat(getActivity());
-        CharSequence pattern = ((SimpleDateFormat)dateFormat).toLocalizedPattern();
+    private ArrayList<String> getCalendarData() {
+        Format dateFormat = DateFormat.getDateFormat(getActivity());
+        CharSequence pattern = ((SimpleDateFormat) dateFormat).toLocalizedPattern();
 
 
         ArrayList<String> calendarList = new ArrayList<String>();
 
-        for (int i =0; i < 25; i++) {
+        for (int i = 0; i < 25; i++) {
             Calendar c = Calendar.getInstance();
-            c.setTime(new Date(c.getTime().getTime() - i * 1000 * 60 * 60*24));
-            calendarList.add(DateFormat.format(pattern,c).toString());
+            c.setTime(new Date(c.getTime().getTime() - i * 1000 * 60 * 60 * 24));
+            calendarList.add(DateFormat.format(pattern, c).toString());
         }
         return calendarList;
     }

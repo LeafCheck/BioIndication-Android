@@ -7,11 +7,5 @@
         </shape>
     </item>
 
-<!--
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_local_florist_black_48px" />
-    </item>
--->
+
 </layer-list>

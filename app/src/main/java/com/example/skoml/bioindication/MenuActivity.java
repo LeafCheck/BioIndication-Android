@@ -3,13 +3,10 @@ package com.example.skoml.bioindication;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
@@ -17,13 +14,26 @@ import com.special.ResideMenu.ResideMenuItem;
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
-public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
+public class MenuActivity extends FragmentActivity implements View.OnClickListener {
 
+    Location location = null;
     private ResideMenu resideMenu;
     private ResideMenuItem itemHome;
     private ResideMenuItem itemMap;
     private ResideMenuItem itemHistory;
     private ResideMenuItem itemSettings;
+    private ResideMenuItem itemAbout;
+    private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
+        @Override
+        public void openMenu() {
+            // Toast.makeText(mContext, "Menu is opened!", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void closeMenu() {
+            // Toast.makeText(mContext, "Menu is closed!", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     /**
      * Called when the activity is first created.
@@ -32,17 +42,13 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-       // getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-      //  requestWindowFeature(Window.FEATURE_NO_TITLE);
-      //  getSupportActionBar().hide();
-
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO);
 
         setContentView(R.layout.main);
 
 
         setUpMenu();
-        if( savedInstanceState == null )
+
+        if (savedInstanceState == null)
             changeFragment(new HomeFragment());
 
 
@@ -52,27 +58,30 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
 
         // attach to current activity;
         resideMenu = new ResideMenu(this);
-        resideMenu.setBackground(R.drawable.menu_background);
+        resideMenu.setBackground(R.drawable.bg_screen);
         resideMenu.attachToActivity(this);
         resideMenu.setMenuListener(menuListener);
-        //valid scale factor is between 0.0f and 1.0f. leftmenu'width is 150dip. 
+        //valid scale factor is between 0.0f and 1.0f. leftmenu'width is 150dip.
         resideMenu.setScaleValue(0.6f);
 
         // create menu items;
-        itemHome     = new ResideMenuItem(this, R.drawable.ic_home_white_48dp,     "Home");
-        itemMap  = new ResideMenuItem(this, R.drawable.ic_map_white_48dp,  "Map");
-        itemHistory = new ResideMenuItem(this, R.drawable.ic_event_note_white_48dp, "History");
-        itemSettings = new ResideMenuItem(this, R.drawable.ic_settings_white_48dp, "Settings");
+        itemHome = new ResideMenuItem(this, R.drawable.ic_camera_black_48px, "Camera");
+        itemMap = new ResideMenuItem(this, R.drawable.ic_map_black_48px, "Map");
+        itemHistory = new ResideMenuItem(this, R.drawable.ic_event_note_black_48px, "History");
+        itemSettings = new ResideMenuItem(this, R.drawable.ic_settings_black_48px, "Settings");
+        itemAbout = new ResideMenuItem(this, R.drawable.ic_plus_one_black_48px, "About us");
 
         itemHome.setOnClickListener(this);
         itemMap.setOnClickListener(this);
         itemHistory.setOnClickListener(this);
         itemSettings.setOnClickListener(this);
+        itemAbout.setOnClickListener(this);
 
         resideMenu.addMenuItem(itemHome, ResideMenu.DIRECTION_LEFT);
         resideMenu.addMenuItem(itemMap, ResideMenu.DIRECTION_LEFT);
         resideMenu.addMenuItem(itemHistory, ResideMenu.DIRECTION_RIGHT);
         resideMenu.addMenuItem(itemSettings, ResideMenu.DIRECTION_RIGHT);
+        resideMenu.addMenuItem(itemAbout, ResideMenu.DIRECTION_RIGHT);
 
         // You can disable a direction by setting ->
         // resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
@@ -99,32 +108,21 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
 
-        if (view == itemHome){
+        if (view == itemHome) {
             changeFragment(new HomeFragment());
-        }else if (view == itemMap){
+        } else if (view == itemMap) {
             changeFragment(new MapFragment());
-        }else if (view == itemHistory){
+        } else if (view == itemHistory) {
             changeFragment(new HistoryFragment());
-        }else if (view == itemSettings){
+        } else if (view == itemSettings) {
             changeFragment(new SettingsFragment());
+        } else if (view == itemAbout) {
+            changeFragment(new AboutFragment());
         }
-
         resideMenu.closeMenu();
     }
 
-    private ResideMenu.OnMenuListener menuListener = new ResideMenu.OnMenuListener() {
-        @Override
-        public void openMenu() {
-           // Toast.makeText(mContext, "Menu is opened!", Toast.LENGTH_SHORT).show();
-        }
-
-        @Override
-        public void closeMenu() {
-           // Toast.makeText(mContext, "Menu is closed!", Toast.LENGTH_SHORT).show();
-        }
-    };
-
-    private void changeFragment(Fragment targetFragment){
+    private void changeFragment(Fragment targetFragment) {
         resideMenu.clearIgnoredViewList();
         getSupportFragmentManager()
                 .beginTransaction()
@@ -134,7 +132,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     // What good method is to access resideMenu？
-    public ResideMenu getResideMenu(){
+    public ResideMenu getResideMenu() {
         return resideMenu;
     }
 
@@ -143,18 +141,18 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         super.onStart();
         startLocation();
     }
+
     @Override
     protected void onStop() {
         stopLocation();
         super.onStop();
     }
 
-    Location location = null;
     private void startLocation() {
         new SmartLocation.Builder(this).build().location().start(new OnLocationUpdatedListener() {
             @Override
             public void onLocationUpdated(Location location) {
-              MenuActivity.this.location = location;
+                MenuActivity.this.location = location;
             }
         });
 

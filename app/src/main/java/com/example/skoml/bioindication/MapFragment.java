@@ -11,10 +11,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.compass.CompassOverlay;
-import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+import org.osmdroid.views.overlay.TilesOverlay;
 
 public class MapFragment extends Fragment {
 
@@ -23,19 +20,19 @@ public class MapFragment extends Fragment {
         View v = inflater.inflate(R.layout.map, container, false);
         MapView map = (MapView) v.findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
         mapController.setZoom(15);
         Location location = ((MenuActivity) getActivity()).location;
-        if( location!=null)
-        {
+        if (location != null) {
             GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
             mapController.setCenter(startPoint);
         }
 
-;
+
 
         return v;
     }

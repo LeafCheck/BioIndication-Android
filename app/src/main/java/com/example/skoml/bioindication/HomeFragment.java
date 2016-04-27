@@ -2,10 +2,13 @@ package com.example.skoml.bioindication;
 
 import android.app.AlertDialog;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -31,13 +34,13 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HomeFragment extends Fragment implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback
- {
-private Camera camera;
-private SurfaceHolder surfaceHolder;
-private SurfaceView preview;
-private Button shotBtn;
-     private ImageView leaf;
-private View  parentView;
+{
+    private Camera camera;
+    private SurfaceHolder surfaceHolder;
+    private SurfaceView preview;
+    private Button shotBtn;
+    //private ImageView leaf;
+    private View  parentView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ private View  parentView;
         shotBtn = (Button) parentView.findViewById(R.id.Button01);
         shotBtn.setText("Shot");
         shotBtn.setOnClickListener(this);
-        leaf = (ImageView) parentView.findViewById(R.id.leaf);
+        //leaf = (ImageView) parentView.findViewById(R.id.leaf);
 
         return parentView;
     }
@@ -82,8 +85,35 @@ private View  parentView;
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
+    public void surfaceChanged(SurfaceHolder holder, int format, int previewSurfaceWidth, int previewSurfaceHeight)
     {
+        /*
+
+        Size previewSize = camera.getParameters().getPreviewSize();
+        float aspect = (float) previewSize.width / previewSize.height;
+        LayoutParams lp = preview.getLayoutParams();
+
+        // здесь корректируем размер отображаемого preview, чтобы не было искажений
+
+        if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
+        {
+            // портретный вид
+            camera.setDisplayOrientation(90);
+            lp.height = previewSurfaceHeight;
+            lp.width = (int) (previewSurfaceHeight / aspect);
+            ;
+        }
+        else
+        {
+            // ландшафтный
+            camera.setDisplayOrientation(0);
+            lp.width = previewSurfaceWidth;
+            lp.height = (int) (previewSurfaceWidth / aspect);
+        }
+
+        preview.setLayoutParams(lp);
+
+*/
     }
 
 
@@ -146,7 +176,7 @@ private View  parentView;
             List<String> supportedFocusModes = camera.getParameters().getSupportedFocusModes();
             boolean hasAutoFocus = supportedFocusModes != null && supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO);
             if(hasAutoFocus)
-            camera.autoFocus(this);
+                camera.autoFocus(this);
             else
                 camera.takePicture(null, null, null, this);
 
@@ -159,7 +189,7 @@ private View  parentView;
 
         paramCamera.stopPreview();
         shotBtn.setVisibility(View.GONE);
-        leaf.setVisibility(View.GONE);
+        //leaf.setVisibility(View.GONE);
         final ArrowDownloadButton  button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
 
         try
@@ -205,7 +235,7 @@ private View  parentView;
                         @Override
                         public void run() {
                             if(button.getProgress()<100)
-                            button.setProgress(button.getProgress() + 1);
+                                button.setProgress(button.getProgress() + 1);
                             else
                             {
                                 paramCamera.startPreview();
@@ -213,7 +243,7 @@ private View  parentView;
                                 button.reset();
                                 button.setVisibility(View.GONE);
                                 shotBtn.setVisibility(View.VISIBLE);
-                                leaf.setVisibility(View.VISIBLE);
+                               // leaf.setVisibility(View.VISIBLE);
                                 showResult(new Random().nextInt(5));
                             }
                         }
@@ -228,7 +258,7 @@ private View  parentView;
             button.reset();
             button.setVisibility(View.GONE);
             shotBtn.setVisibility(View.VISIBLE);
-            leaf.setVisibility(View.VISIBLE);
+            //leaf.setVisibility(View.VISIBLE);
             paramCamera.startPreview();
         }
 
@@ -255,87 +285,38 @@ private View  parentView;
 
 
 
-     private void showResult(int value){
-         int icon;
-         switch (value){
-             case 0: //very happy
-                 icon = R.drawable.ic_sentiment_very_satisfied_white_48dp;
-                 break;
-             case 1: //happy
-                 icon = R.drawable.ic_sentiment_satisfied_white_48dp;
-                 break;
-             case 2: //neutral
-                 icon = R.drawable.ic_sentiment_neutral_white_48dp;
-                 break;
-             case 3: //unhappy
-                 icon = R.drawable.ic_sentiment_dissatisfied_white_48dp;
-                 break;
-             case 4: //very unhappy
-                 icon = R.drawable.ic_sentiment_very_dissatisfied_white_48dp;
-                 break;
-             default:
-                 icon = R.drawable.ic_sentiment_neutral_white_48dp;
-                 break;
-         }
+    private void showResult(int value){
+        int icon;
+        switch (value){
+            case 0: //very happy
+                icon = R.drawable.ic_sentiment_very_satisfied_black_48px;
+                break;
+            case 1: //happy
+                icon = R.drawable.ic_sentiment_satisfied_black_48px;
+                break;
+            case 2: //neutral
+                icon = R.drawable.ic_sentiment_neutral_black_48px;
+                break;
+            case 3: //unhappy
+                icon = R.drawable.ic_sentiment_dissatisfied_black_48px;
+                break;
+            case 4: //very unhappy
+                icon = R.drawable.ic_sentiment_very_dissatisfied_black_48px;
+                break;
+            default:
+                icon = R.drawable.ic_sentiment_neutral_black_48px;
+                break;
+        }
 
-        new AlertDialog.Builder(getActivity(),
-                AlertDialog.THEME_DEVICE_DEFAULT_DARK).
+        Drawable dr =  getResources().getDrawable(icon);
+        dr = DrawableCompat.wrap(dr);
+        DrawableCompat.setTint(dr.mutate(), Color.WHITE);
+
+        new AlertDialog.Builder(getActivity()).
                 setTitle("Result").
-                setIcon(icon).
+                setIcon(dr).
                 setMessage(String.format("The quality of the environment: %d from 5",  (5-value))).show();
 
-     }
-     public final static int TRANS_NONE = -1;
-     public final static int TRANS_MIRROR_ROT180 = 0;
-     public final static int TRANS_MIRROR = 1;
-     public final static int TRANS_ROT180 = 2;
-     public final static int TRANS_MIRROR_ROT270 = 3;
-     public final static int TRANS_ROT90 = 4;
-     public final static int TRANS_MIRROR_ROT90 = 5;
-     public static final int rotation = TRANS_MIRROR_ROT180;
-
-     public static void transform(final View v){
-
-         switch(rotation){
-             case TRANS_MIRROR_ROT180:
-                 v.setScaleX(-1);
-                 v.setScaleY(1);
-                 v.setTranslationX(v.getWidth());
-                 v.setTranslationY(0);
-                 v.setRotation(180);
-                 break;
-             case TRANS_MIRROR:
-                 v.setScaleX(-1);
-                 v.setScaleY(1);
-                 v.setTranslationX(v.getWidth());
-                 v.setTranslationY(0);
-                 break;
-             case TRANS_ROT180:
-                 v.setRotation(180);
-                 break;
-             case TRANS_MIRROR_ROT270:
-                 v.setScaleX(-1);
-                 v.setScaleY(1);
-                 v.setTranslationX(v.getWidth());
-                 v.setTranslationY(0);
-                 v.setRotation(270);
-                 break;
-             case TRANS_ROT90:
-                 v.setRotation(90);
-                 break;
-             case TRANS_MIRROR_ROT90:
-                 v.setScaleX(-1);
-                 v.setScaleY(1);
-                 v.setTranslationX(v.getWidth());
-                 v.setTranslationY(0);
-                 v.setRotation(90);
-                 break;
-             case TRANS_NONE:
-             default: break;
-
-         }
-
-
-     }
-
+    }
+   
 }
