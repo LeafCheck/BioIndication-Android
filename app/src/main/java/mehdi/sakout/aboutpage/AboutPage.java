@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -50,7 +49,7 @@ public class AboutPage {
         Element emailElement = new Element();
         emailElement.setTitle(mContext.getString(R.string.about_contact_us));
         emailElement.setIcon(R.drawable.about_icon_email);
-        emailElement.setColor(ContextCompat.getColor(mContext, R.color.about_item_icon_color));
+        emailElement.setColor(mContext.getResources().getColor( R.color.about_item_icon_color));
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
@@ -68,7 +67,7 @@ public class AboutPage {
         Element facebookElement = new Element();
         facebookElement.setTitle(mContext.getString(R.string.about_facebook));
         facebookElement.setIcon(R.drawable.about_icon_facebook);
-        facebookElement.setColor(ContextCompat.getColor(mContext, R.color.facebook_color));
+        facebookElement.setColor(mContext.getResources().getColor( R.color.facebook_color));
         facebookElement.setValue(id);
 
         Intent intent = new Intent();
@@ -109,7 +108,7 @@ public class AboutPage {
         Element twitterElement = new Element();
         twitterElement.setTitle(mContext.getString(R.string.about_twitter));
         twitterElement.setIcon(R.drawable.about_icon_twitter);
-        twitterElement.setColor(ContextCompat.getColor(mContext, R.color.twitter_color));
+        twitterElement.setColor(mContext.getResources().getColor( R.color.twitter_color));
         twitterElement.setValue(id);
 
         Intent intent = new Intent();
@@ -135,7 +134,7 @@ public class AboutPage {
         Element playStoreElement = new Element();
         playStoreElement.setTitle(mContext.getString(R.string.about_play_store));
         playStoreElement.setIcon(R.drawable.about_icon_google_play);
-        playStoreElement.setColor(ContextCompat.getColor(mContext, R.color.play_store_color));
+        playStoreElement.setColor(mContext.getResources().getColor( R.color.play_store_color));
         playStoreElement.setValue(id);
 
         Uri uri = Uri.parse("market://details?id=" + id);
@@ -153,7 +152,7 @@ public class AboutPage {
         Element youtubeElement = new Element();
         youtubeElement.setTitle(mContext.getString(R.string.about_youtube));
         youtubeElement.setIcon(R.drawable.about_icon_youtube);
-        youtubeElement.setColor(ContextCompat.getColor(mContext, R.color.youtube_color));
+        youtubeElement.setColor(mContext.getResources().getColor( R.color.youtube_color));
         youtubeElement.setValue(id);
 
         Intent intent = new Intent();
@@ -177,7 +176,7 @@ public class AboutPage {
         Element instagramElement = new Element();
         instagramElement.setTitle(mContext.getString(R.string.about_instagram));
         instagramElement.setIcon(R.drawable.about_icon_instagram);
-        instagramElement.setColor(ContextCompat.getColor(mContext, R.color.instagram_color));
+        instagramElement.setColor(mContext.getResources().getColor( R.color.instagram_color));
         instagramElement.setValue(id);
 
         Intent intent = new Intent();
@@ -201,7 +200,7 @@ public class AboutPage {
         Element gitHubElement = new Element();
         gitHubElement.setTitle(mContext.getString(R.string.about_github));
         gitHubElement.setIcon(R.drawable.about_icon_github);
-        gitHubElement.setColor(ContextCompat.getColor(mContext, R.color.github_color));
+        gitHubElement.setColor(mContext.getResources().getColor( R.color.github_color));
         gitHubElement.setValue(id);
 
         Intent intent = new Intent();
@@ -231,7 +230,7 @@ public class AboutPage {
 
         TextView textView = new TextView(mContext);
         textView.setText(name);
-        textView.setTextColor(ContextCompat.getColor(mContext, R.color.about_item_text_color));
+        textView.setTextColor(mContext.getResources().getColor( R.color.about_item_text_color));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.about_group_item_text_size));
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -319,9 +318,10 @@ public class AboutPage {
 
 
         TextView textView = new TextView(mContext);
-        textView.setTextColor(ContextCompat.getColor(mContext, R.color.about_item_text_color));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.about_item_text_size));
         textView.setTextAppearance(mContext, android.R.style.TextAppearance);
+
+        textView.setTextColor(mContext.getResources().getColor(R.color.about_item_text_color));//mContext.getResources().getColor( R.color.about_item_text_color));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, mContext.getResources().getDimension(R.dimen.about_item_text_size));
         LinearLayout.LayoutParams textParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         textView.setLayoutParams(textParams);
         if (mCustomFont != null) {
@@ -345,7 +345,7 @@ public class AboutPage {
             if (element.getColor() != null) {
                 DrawableCompat.setTint(wrappedDrawable, element.getColor());
             } else {
-                DrawableCompat.setTint(wrappedDrawable, ContextCompat.getColor(mContext, R.color.about_item_icon_color));
+                DrawableCompat.setTint(wrappedDrawable, mContext.getResources().getColor( R.color.about_item_icon_color));
             }
         } else {
             int iconPadding = mContext.getResources().getDimensionPixelSize(R.dimen.about_icon_padding);

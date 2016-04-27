@@ -10,6 +10,9 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        jackOptions{
+            enabled true
+        }
         //useJack = true
         //vectorDrawables.useSupportLibrary = true
     }
@@ -25,7 +28,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'org.osmdroid:osmdroid-android:5.1@aar'
-    compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.7'
+    //compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.7'
     compile 'io.nlopez.smartlocation:library:3.2.+'
     compile files('libs/nineoldandroids-library-2.4.0.jar')
 
