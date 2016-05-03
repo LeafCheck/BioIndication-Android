@@ -60,24 +60,24 @@ public class LinesDrawer extends View {
         super.onDraw(canvas);
         path.reset();
         boolean first = true;
-        for (Point point : points) {
-            if (first) {
-                first = false;
-                path.moveTo(point.x, point.y);
-            } else {
-                path.lineTo(point.x, point.y);
-            }
+        final int size = points.size();
+        for (int i = 1; i < size; i += 2) {
+            Point p1 = points.get(i - 1);
+            Point p2 = points.get(i);
+            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
         }
-        canvas.drawPath(path, paint);
+        if (size % 2 != 0) {
+            Point p1 = points.get(size - 1);
+            canvas.drawPoint(p1.x, p1.y, paint);
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.v(this.getClass().getName(), "TOUCH " + event.toString() + " " + Arrays.deepToString(points.toArray()));
+        //Log.v(this.getClass().getName(), "TOUCH " + event.toString() + " " + Arrays.deepToString(points.toArray()));
 
         if(event.getAction() == MotionEvent.ACTION_DOWN) {
-            Point point = new Point();
-            point.set((int) event.getX(), (int) event.getY());
+            Point point = new Point((int) event.getX(), (int) event.getY());
             if (points.isEmpty()) {
                 points.add(point);
             } else {
@@ -85,7 +85,6 @@ public class LinesDrawer extends View {
             }
             roaming = false;
             invalidate();
-
         }
         else
 
