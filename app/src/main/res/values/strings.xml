@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LeafCheck</string>
+    <string name="app_name">EcoMetr</string>
 
 
     <string name="about_page_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vehicula ligula tortor, in pellentesque dui congue ac. Vestibulum lacinia urna magna, quis cursus ante iaculis nec. Nunc ut ligula sit amet odio ultrices euismod vel vel purus. Sed lacus mauris, aliquam et placerat id</string>
@@ -12,4 +12,5 @@
     <string name="about_youtube">Watch us on Youtube</string>
     <string name="about_twitter">Follow us on Twitter</string>
     <string name="about_github">Fork us on GitHub</string>
+
 </resources>

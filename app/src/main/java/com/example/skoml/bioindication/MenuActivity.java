@@ -1,20 +1,21 @@
 package com.example.skoml.bioindication;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.ecometr.app.R;
 import com.special.ResideMenu.ResideMenu;
 import com.special.ResideMenu.ResideMenuItem;
 
 import io.nlopez.smartlocation.OnLocationUpdatedListener;
 import io.nlopez.smartlocation.SmartLocation;
 
-public class MenuActivity extends FragmentActivity implements View.OnClickListener {
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener {
 
     Location location = null;
     private ResideMenu resideMenu;
@@ -122,9 +123,9 @@ public class MenuActivity extends FragmentActivity implements View.OnClickListen
         resideMenu.closeMenu();
     }
 
-    private void changeFragment(Fragment targetFragment) {
+    protected void changeFragment(Fragment targetFragment) {
         resideMenu.clearIgnoredViewList();
-        getSupportFragmentManager()
+        getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_fragment, targetFragment, "fragment")
                 .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

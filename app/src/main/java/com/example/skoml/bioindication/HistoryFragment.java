@@ -1,7 +1,7 @@
 package com.example.skoml.bioindication;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +10,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.ecometr.app.R;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;

@@ -12,6 +12,23 @@
         android:layout_height="fill_parent">
     </SurfaceView>
 
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        />
+
+    <com.example.skoml.bioindication.RulerView
+        style="@style/RulerViewStyle"
+        android:id="@+id/ruler_view"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.fenjuly.library.ArrowDownloadButton
         android:id="@+id/arrow_button"
         android:layout_gravity="center"
@@ -33,10 +50,22 @@
         android:layout_gravity="center_horizontal|bottom"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector"
+        android:background="@drawable/button_selector_green"
         android:textColor="@android:color/white"
         android:textSize="17sp"
         android:padding="12dp"
+        android:layout_marginTop="4dp">
+    </Button>
+    <Button android:text="@+id/Button01"
+        android:id="@+id/Button02"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_selector_red"
+        android:textColor="@android:color/white"
+        android:textSize="17sp"
+        android:padding="12dp"
+        android:visibility="gone"
         android:layout_marginTop="4dp">
     </Button>
 </FrameLayout>

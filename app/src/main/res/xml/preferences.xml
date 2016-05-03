@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="useRuler"
+        android:summary="Disable or enable on-screen ruler"
+        android:title="On-screen Ruler">
+    </CheckBoxPreference>
+    <PreferenceCategory
+        android:title="Edge Detection Filters"
+        android:key="edge_detection_filters">
+    <CheckBoxPreference
+        android:key="colorEdges"
+        android:summary="Disable or enable Color Edges filter"
+        android:title="Color Edge">
+    </CheckBoxPreference>
+    <CheckBoxPreference
+        android:key="grayEdges"
+        android:summary="Disable or enable Gray Edges filter"
+        android:title="Gray Edge">
+    </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="substractEdges"
+            android:summary="Disable or enable Subtract Edges filter"
+            android:title="Subtract Edge">
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Edge Detection Operators"
+        android:key="edge_detection_operators">
+        <CheckBoxPreference
+            android:key="Roberts"
+            android:summary="Disable or enable Roberts operator"
+            android:title="Roberts">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="Prewitt"
+            android:summary="Disable or enable Prewitt operator"
+            android:title="Prewitt">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="Sobel"
+            android:summary="Disable or enable Sobel operator"
+            android:title="Sobel">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:key="Scharr"
+            android:summary="Disable or enable Scharr operator"
+            android:title="Scharr">
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

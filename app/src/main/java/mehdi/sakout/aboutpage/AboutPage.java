@@ -17,7 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.skoml.bioindication.R;
+import com.ecometr.app.R;
+
 
 /**
  * Created by medyo on 3/25/16.

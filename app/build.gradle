@@ -2,18 +2,18 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion '24.0.0 rc3'
+    buildToolsVersion '23.0.3'
 
     defaultConfig {
-        applicationId "com.example.skoml.bioindication"
-        minSdkVersion 21
+        applicationId "com.ecometr.app"
+        minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        jackOptions{
-            enabled true
-        }
-        //useJack = true
+   //     jackOptions{
+   //         enabled true
+   //     }
+    true
         //vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -31,5 +31,6 @@ dependencies {
     //compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.7'
     compile 'io.nlopez.smartlocation:library:3.2.+'
     compile files('libs/nineoldandroids-library-2.4.0.jar')
-
+    compile 'com.github.paolorotolo:appintro:3.4.0'
+    compile 'com.android.support:appcompat-v7:23.3.0'
 }
