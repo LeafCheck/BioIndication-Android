@@ -29,6 +29,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.example.skoml.bioindication.LinesDrawer
+        android:id="@+id/lines_drawer"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.fenjuly.library.ArrowDownloadButton
         android:id="@+id/arrow_button"
         android:layout_gravity="center"

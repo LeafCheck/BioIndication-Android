@@ -54,7 +54,8 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private View  parentView;
 
 
-    ImageView iv;
+    ImageView imageView;
+    LinesDrawer linesDrawer;
     Bitmap bm;
 
     ArrowDownloadButton button;
@@ -77,7 +78,8 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         //leaf = (ImageView) parentView.findViewById(R.id.leaf);
 
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
-        iv = (ImageView) parentView.findViewById(R.id.imageView);
+        imageView = (ImageView) parentView.findViewById(R.id.imageView);
+        linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
         retryBtn  = (Button) parentView.findViewById(R.id.Button02);
         retryBtn.setText("Retry");
         retryBtn.setOnClickListener(this);
@@ -114,7 +116,9 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             timer.cancel();
             button.reset();
-            iv.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+            linesDrawer.reset();
+            linesDrawer.setVisibility(View.INVISIBLE);
             retryBtn.setVisibility(View.INVISIBLE);
 
 
@@ -390,12 +394,12 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                             else
                             {
                                 preview.setVisibility(View.INVISIBLE);
-                                iv.setVisibility(View.VISIBLE);
-                                iv.setImageBitmap(bm);
+                                imageView.setVisibility(View.VISIBLE);
+                                linesDrawer.setVisibility(View.VISIBLE);
 
                                 button.setVisibility(View.INVISIBLE);
                                 retryBtn.setVisibility(View.VISIBLE);
-                                iv.setImageBitmap(bm);
+                                imageView.setImageBitmap(bm);
                                 //showResult(3);
                             }
 
