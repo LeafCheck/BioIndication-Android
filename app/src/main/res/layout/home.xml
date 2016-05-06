@@ -52,20 +52,40 @@
 
 
 -->
-    <Button android:text="@+id/Button01"
-        android:id="@+id/Button01"
-        android:layout_gravity="center_horizontal|bottom"
+
+    <LinearLayout
+        android:id="@+id/shotOrPick"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_selector_green"
-        android:textColor="@android:color/white"
-        android:textSize="17sp"
-        android:padding="12dp"
-        android:layout_marginTop="4dp">
-    </Button>
-    <Button android:text="@+id/Button01"
-        android:id="@+id/Button02"
         android:layout_gravity="center_horizontal|bottom"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/shot"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector_green"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:padding="12dp"
+
+            android:layout_weight="1"
+            android:layout_marginTop="4dp">
+        </Button>
+        <Button
+            android:id="@+id/pick"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_selector_blue"
+            android:textColor="@android:color/white"
+            android:layout_weight="1"
+            android:textSize="17sp"
+            android:padding="12dp"
+            android:layout_marginTop="4dp">
+        </Button>
+        </LinearLayout>
+    <Button
+        android:id="@+id/retry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/button_selector_red"
@@ -73,6 +93,7 @@
         android:textSize="17sp"
         android:padding="12dp"
         android:visibility="gone"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_marginTop="4dp">
     </Button>
 </FrameLayout>

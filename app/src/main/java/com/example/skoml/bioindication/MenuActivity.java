@@ -2,6 +2,7 @@ package com.example.skoml.bioindication;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -50,7 +51,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         setUpMenu();
 
         if (savedInstanceState == null)
-            changeFragment(new HomeFragment());
+            changeFragment(new HomeFragment(), HomeFragment.class.getName());
 
 
     }
@@ -110,24 +111,24 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
 
         if (view == itemHome) {
-            changeFragment(new HomeFragment());
+            changeFragment(new HomeFragment(), HomeFragment.class.getName());
         } else if (view == itemMap) {
-            changeFragment(new MapFragment());
+            changeFragment(new MapFragment(), MapFragment.class.getName());
         } else if (view == itemHistory) {
-            changeFragment(new HistoryFragment());
+            changeFragment(new HistoryFragment(), HistoryFragment.class.getName());
         } else if (view == itemSettings) {
-            changeFragment(new SettingsFragment());
+            changeFragment(new SettingsFragment(),  SettingsFragment.class.getName());
         } else if (view == itemAbout) {
-            changeFragment(new AboutFragment());
+            changeFragment(new AboutFragment(), AboutFragment.class.getName());
         }
         resideMenu.closeMenu();
     }
 
-    protected void changeFragment(Fragment targetFragment) {
+    protected void changeFragment(Fragment targetFragment, String tag) {
         resideMenu.clearIgnoredViewList();
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_fragment, targetFragment, "fragment")
+                .replace(R.id.main_fragment, targetFragment, tag)
                 .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
@@ -162,5 +163,11 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     private void stopLocation() {
         SmartLocation.with(this).location().stop();
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = getFragmentManager().findFragmentByTag(HomeFragment.class.getName());
+        if(fragment!=null)
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
 }

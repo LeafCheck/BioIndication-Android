@@ -3,8 +3,13 @@ package com.example.skoml.bioindication;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -12,10 +17,12 @@ import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -26,6 +33,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.ecometr.app.R;
 import com.fenjuly.library.ArrowDownloadButton;
@@ -35,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
@@ -49,7 +58,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private Camera camera;
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
-    private Button shotBtn, retryBtn;
+    private Button shotBtn, retryBtn, pickBtn;
     //private ImageView leaf;
     private View  parentView;
 
@@ -72,15 +81,19 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
         // кнопка имеет имя Button01
-        shotBtn = (Button) parentView.findViewById(R.id.Button01);
+        shotBtn = (Button) parentView.findViewById(R.id.shot);
         shotBtn.setText("Shot");
         shotBtn.setOnClickListener(this);
+
+        pickBtn = (Button) parentView.findViewById(R.id.pick);
+        pickBtn.setText("Pick file");
+        pickBtn.setOnClickListener(this);
         //leaf = (ImageView) parentView.findViewById(R.id.leaf);
 
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
         imageView = (ImageView) parentView.findViewById(R.id.imageView);
         linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
-        retryBtn  = (Button) parentView.findViewById(R.id.Button02);
+        retryBtn  = (Button) parentView.findViewById(R.id.retry);
         retryBtn.setText("Retry");
         retryBtn.setOnClickListener(this);
 
@@ -123,7 +136,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
 
             preview.setVisibility(View.VISIBLE);
-            shotBtn.setVisibility(View.VISIBLE);
+            parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
 
             setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
             camera.startPreview();
@@ -133,20 +146,153 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
 
         }
+        if (v == pickBtn)
+        {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            try {
+                startActivityForResult(
+                        Intent.createChooser(intent, "Select Photo"),
+                        FILE_SELECT_CODE);
+               if(camera!=null)
+                   camera.stopPreview();
+            } catch (Exception ex) {
+                // Potentially direct the user to the Market with a Dialog
+                Toast.makeText(getActivity(), ex.toString(),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+
+
+    private static final int FILE_SELECT_CODE = 0;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+
+                    System.out.println(uri);
+
+                    // Get the path
+                    String path = getPath(getActivity(), uri);
+
+                    System.out.println(path);
+
+                    byte[] paramArrayOfByte = getIcon(getActivity(), path);
+
+
+                    processPicture(paramArrayOfByte, camera);
+
+                    // Get the file instance
+                    // File file = new File(path);
+                    // Initiate the upload
+                }
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public String getPath(Context context, Uri uri) {
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+            String[] projection = {MediaStore.Images.Media.DATA };
+            Cursor cursor = null;
+
+            try {
+                cursor = context.getContentResolver().query(uri, projection, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow(projection[0]);
+                if (cursor.moveToFirst()) {
+                    String path = cursor.getString(column_index);
+
+                    cursor.close();
+                    return path;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Eat it
+            }
+            if(cursor!=null)
+                cursor.close();
+        }
+        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
+        }
+
+        return null;
+    }
+    private byte[] getIcon(Context context, String fileName) {
+        try{
+            File dst = new File(fileName);
+            if (!dst.exists())
+                return null;
+
+            if(dst.length() == 0)
+                return new byte[0];
+
+            FileInputStream inStream = new FileInputStream(dst);
+            FileChannel inChannel = inStream.getChannel();
+            ByteBuffer buffer = ByteBuffer.allocate((int) inChannel.size());
+            inChannel.read(buffer);
+            buffer.rewind();
+            inChannel.close();
+            inStream.close();
+            return buffer.array();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return null;
     }
 
 
     @Override
     public void onResume()
     {
-        super.onResume();
+             super.onResume();
 
+            if(camera == null)
             camera = Camera.open();
-            setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
+            if(camera!=null)
+                setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
 
+        PackageManager pm = getActivity().getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        final List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(intent, 0);
+        if(pkgAppsList==null || pkgAppsList.size()==0)
+            pickBtn.setVisibility(View.GONE);
+        else {
+            if (pickBtn.getVisibility() == View.GONE)
+                pickBtn.setVisibility(View.VISIBLE);
+        }
 
     }
-    public static void setCameraDisplayOrientation(Activity activity, int cameraId, android.hardware.Camera camera) {
+
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        if(bm!=null)
+          bm.recycle();
+        bm = null;
+        if (camera != null)
+        {
+            camera.setPreviewCallback(null);
+            camera.stopPreview();
+            camera.release();
+            camera = null;
+        }
+
+    }
+
+    public void setCameraDisplayOrientation(Activity activity, int cameraId, android.hardware.Camera camera) {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
@@ -212,23 +358,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     }
 
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-
-        if(bm!=null)
-        bm.recycle();
-        bm = null;
-
-        if (camera != null)
-        {
-            camera.setPreviewCallback(null);
-            camera.stopPreview();
-            camera.release();
-            camera = null;
-        }
-    }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int previewSurfaceWidth, int previewSurfaceHeight)
@@ -244,40 +373,41 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         {
             camera.setPreviewDisplay(holder);
             camera.setPreviewCallback(this);
+
+            Size previewSize = camera.getParameters().getPreviewSize();
+            float aspect = (float) previewSize.width / previewSize.height;
+
+            int previewSurfaceWidth = preview.getWidth();
+            int previewSurfaceHeight = preview.getHeight();
+
+            LayoutParams lp = preview.getLayoutParams();
+
+            // здесь корректируем размер отображаемого preview, чтобы не было искажений
+
+            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
+            {
+                // портретный вид
+                camera.setDisplayOrientation(90);
+                lp.height = previewSurfaceHeight;
+                lp.width = (int) (previewSurfaceHeight / aspect);
+                ;
+            }
+            else
+            {
+                // ландшафтный
+                camera.setDisplayOrientation(0);
+                lp.width = previewSurfaceWidth;
+                lp.height = (int) (previewSurfaceWidth / aspect);
+            }
+
+            preview.setLayoutParams(lp);
+            camera.startPreview();
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        Size previewSize = camera.getParameters().getPreviewSize();
-        float aspect = (float) previewSize.width / previewSize.height;
-
-        int previewSurfaceWidth = preview.getWidth();
-        int previewSurfaceHeight = preview.getHeight();
-
-        LayoutParams lp = preview.getLayoutParams();
-
-        // здесь корректируем размер отображаемого preview, чтобы не было искажений
-
-        if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
-        {
-            // портретный вид
-            camera.setDisplayOrientation(90);
-            lp.height = previewSurfaceHeight;
-            lp.width = (int) (previewSurfaceHeight / aspect);
-            ;
-        }
-        else
-        {
-            // ландшафтный
-            camera.setDisplayOrientation(0);
-            lp.width = previewSurfaceWidth;
-            lp.height = (int) (previewSurfaceWidth / aspect);
-        }
-
-        preview.setLayoutParams(lp);
-        camera.startPreview();
     }
 
     @Override
@@ -291,9 +421,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     {
 
         paramCamera.stopPreview();
-
-
-        shotBtn.setVisibility(View.INVISIBLE);
 
         processPicture(paramArrayOfByte, paramCamera);
 
@@ -367,6 +494,9 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                 boolean finished = false;
                 @Override
                 public void onPreExecute(){
+
+
+                    parentView.findViewById(R.id.shotOrPick).setVisibility(View.INVISIBLE);
 
                     button.setVisibility(View.VISIBLE);
                     button.startAnimating();
