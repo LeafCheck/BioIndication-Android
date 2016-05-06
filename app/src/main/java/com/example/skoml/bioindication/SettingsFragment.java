@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
@@ -35,6 +36,8 @@ public class SettingsFragment extends PreferenceFragment {
 
         //-----------------------------------------------------
 
+
+        final  PreferenceCategory operatorsCats = (PreferenceCategory) getPreferenceScreen().findPreference("edge_detection_operators");
 
         final CheckBoxPreference Roberts = (CheckBoxPreference) this.getPreferenceManager().findPreference("Roberts");
         final CheckBoxPreference Prewitt = (CheckBoxPreference) this.getPreferenceManager().findPreference("Prewitt");
@@ -107,31 +110,43 @@ public class SettingsFragment extends PreferenceFragment {
         final CheckBoxPreference colorEdges = (CheckBoxPreference) this.getPreferenceManager().findPreference("colorEdges");
         final CheckBoxPreference grayEdges = (CheckBoxPreference) this.getPreferenceManager().findPreference("grayEdges");
         final CheckBoxPreference substractEdges = (CheckBoxPreference) this.getPreferenceManager().findPreference("substractEdges");
-
+        final CheckBoxPreference disableEdges = (CheckBoxPreference) this.getPreferenceManager().findPreference("disableEdges");
         colorEdges.setChecked(pref.getInt("edge_filter", 1) == 0);
         grayEdges.setChecked(pref.getInt("edge_filter", 1) == 1);
         substractEdges.setChecked(pref.getInt("edge_filter", 1) == 2);
+        disableEdges.setChecked(pref.getInt("edge_filter", 1) == -1);
+
+        if(disableEdges.isChecked())
+            getPreferenceScreen().removePreference(operatorsCats);
 
         Preference.OnPreferenceChangeListener filters = new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                boolean isAllDisabled = disableEdges.isChecked();
+
                 boolean allfalse = false;
 
                 if(preference.getKey().equals("colorEdges"))
-                    allfalse =  !grayEdges.isChecked() && !substractEdges.isChecked() && !((Boolean) newValue);
+                    allfalse =  !grayEdges.isChecked() && !substractEdges.isChecked() && !disableEdges.isChecked() && !((Boolean) newValue);
 
                 else
                 if(preference.getKey().equals("grayEdges"))
-                    allfalse =  !colorEdges.isChecked() && !substractEdges.isChecked()&& !((Boolean) newValue);
+                    allfalse =  !colorEdges.isChecked() && !substractEdges.isChecked()&& !disableEdges.isChecked() && !((Boolean) newValue);
 
                 else
                 if(preference.getKey().equals("substractEdges"))
-                    allfalse =  !colorEdges.isChecked() && !grayEdges.isChecked() && !((Boolean) newValue);
+                    allfalse =  !colorEdges.isChecked() && !grayEdges.isChecked() && !disableEdges.isChecked() && !((Boolean) newValue);
+
+                else
+                if(preference.getKey().equals("disableEdges"))
+                    allfalse =  !colorEdges.isChecked() && !grayEdges.isChecked() && !substractEdges.isChecked() && !((Boolean) newValue);
+
 
                 if(allfalse)
                     return false;
 
-                int value = 1;
+                int value = -1;
                 if(preference.getKey().equals("colorEdges"))
                     value = 0;
 
@@ -148,6 +163,25 @@ public class SettingsFragment extends PreferenceFragment {
                 colorEdges.setChecked(pref.getInt("edge_filter", 1) == 0);
                 grayEdges.setChecked(pref.getInt("edge_filter", 1) == 1);
                 substractEdges.setChecked(pref.getInt("edge_filter", 1) == 2);
+                disableEdges.setChecked(pref.getInt("edge_filter", 1) == -1);
+
+                if(value == -1){
+                   // getPreferenceScreen().removePreference(Roberts);
+                    //getPreferenceScreen().removePreference(Prewitt);
+                   // getPreferenceScreen().removePreference(Sobel);
+                   // getPreferenceScreen().removePreference(Scharr);
+
+                    getPreferenceScreen().removePreference(operatorsCats);
+                }
+                else if(isAllDisabled && value != -1)
+                {
+
+                    getPreferenceScreen().addPreference(operatorsCats);
+                    //getPreferenceScreen().addPreference(Roberts);
+                    //getPreferenceScreen().addPreference(Prewitt);
+                   // getPreferenceScreen().addPreference(Sobel);
+                    //getPreferenceScreen().addPreference(Scharr);
+                }
 
                 return true;
             }
@@ -155,6 +189,7 @@ public class SettingsFragment extends PreferenceFragment {
         colorEdges.setOnPreferenceChangeListener(filters);
         grayEdges.setOnPreferenceChangeListener(filters);
         substractEdges.setOnPreferenceChangeListener(filters);
+        disableEdges.setOnPreferenceChangeListener(filters);
 
     }
 

@@ -8,6 +8,11 @@
     <PreferenceCategory
         android:title="Edge Detection Filters"
         android:key="edge_detection_filters">
+        <CheckBoxPreference
+            android:key="disableEdges"
+            android:summary="Disable all filter"
+            android:title="Disable Edge detection">
+        </CheckBoxPreference>
     <CheckBoxPreference
         android:key="colorEdges"
         android:summary="Disable or enable Color Edges filter"

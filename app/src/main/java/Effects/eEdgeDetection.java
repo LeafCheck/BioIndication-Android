@@ -69,7 +69,7 @@ void applyEffect() {
            colorEdges(MATRIX_VERTICAL[operator], MATRIX_HORIZONTAL[operator]);
         } else if (mode == 1) {
             grayEdges(MATRIX_VERTICAL[operator], MATRIX_HORIZONTAL[operator]);
-        } else {
+        } else if (mode == 2) {
             substractEdges(MATRIX_VERTICAL[operator], MATRIX_HORIZONTAL[operator]);
        }
 
