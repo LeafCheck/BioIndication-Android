@@ -86,7 +86,8 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         resideMenu.addMenuItem(itemAbout, ResideMenu.DIRECTION_RIGHT);
 
         // You can disable a direction by setting ->
-        // resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_RIGHT);
+        resideMenu.setSwipeDirectionDisable(ResideMenu.DIRECTION_LEFT);
 
         findViewById(R.id.title_bar_left_menu).setOnClickListener(new View.OnClickListener() {
             @Override
