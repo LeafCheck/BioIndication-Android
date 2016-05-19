@@ -529,91 +529,21 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
                                 button.setVisibility(View.INVISIBLE);
                                 retryBtn.setVisibility(View.VISIBLE);
-                                imageView.setImageBitmap(bm);
-                                //showResult(3);
                             }
-
                         }
                     }
                 }
 
                 @Override
                 protected Void doInBackground(Void... params) {
+                    final BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, options);//.decodeResource(res, resId, options);
 
-
-                        boolean cameraFront = false;
-
-                        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-
-
-                        //MiscMethods.log("Screen size "+width +"x"+height +" diagonal "+diagonalSize(context));
-
-                        if (getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
-                            bm = decodeSampledBitmapFromArray(paramArrayOfByte, screenWidth, screenHeight);
-                        else
-                            bm = decodeSampledBitmapFromArray(paramArrayOfByte, screenHeight, screenWidth);
-
-                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                            // Notice that width and height are reversed
-                            Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
-                            int w = scaled.getWidth();
-                            int h = scaled.getHeight();
-                            // Setting post rotate to 90
-                            Matrix mtx = new Matrix();
-
-                            int CameraEyeValue = setPhotoOrientation(getActivity(), cameraFront == true ? 1 : 0); // CameraID = 1 : front 0:back
-                            if (cameraFront) { // As Front camera is Mirrored so Fliping the Orientation
-                                if (CameraEyeValue == 270) {
-                                    mtx.postRotate(90);
-                                } else if (CameraEyeValue == 90) {
-                                    mtx.postRotate(270);
-                                }
-                            } else {
-                                mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
-                            }
-
-                            bm = Bitmap.createBitmap(scaled, 0, 0, w, h, mtx, true);
-                        } else {// LANDSCAPE MODE
-                            //No need to reverse width and height
-                            Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
-                            bm = scaled;
-                        }
-
-
-                        // String path = getArguments().getString("path");
- /*
-
-
-
-
-                    File saveDir = Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_DOWNLOADS);//getActivity().getCacheDir();
-
-                    if (!saveDir.exists())
-                    {
-                        saveDir.mkdirs();
-                    }
-                    final File dst = new File(saveDir, String.format("%d.jpg", System.currentTimeMillis()));
-
-                    FileOutputStream fos = new FileOutputStream(dst);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    fos.write(byteArray);
-                    fos.close();
-
-                   */
-
-                        final SharedPreferences pref = PreferenceManager
-                                .getDefaultSharedPreferences(getActivity());
-
-                        eEdgeDetection effect = new eEdgeDetection();
-                        effect.setFilter(pref.getInt("edge_filter", 1), pref.getInt("edge_operator", 1));
-
-                        effect.setBitmap(bm);
-                        effect.apply();
-                        bm = effect.getBitmap();
+                    bm = BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, null);
+                    Matrix mtx = new Matrix();
+                    mtx.postRotate(90);
+                    bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), mtx, false);
 
                     return null;
                 }
@@ -621,6 +551,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
                 @Override
                 protected void onPostExecute(Void exp) {
+                    imageView.setImageBitmap(bm);
                     finished = true;
                 }
             };
