@@ -57,7 +57,10 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private Camera camera;
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
-    private Button shotBtn, retryBtn, pickBtn;
+    private Button shotBtn;
+    private Button retryBtn;
+    private Button pickBtn;
+    private Button nextBtn;
     //private ImageView leaf;
     private View parentView;
 
@@ -92,9 +95,14 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
         imageView = (ImageView) parentView.findViewById(R.id.imageView);
         linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
+
         retryBtn = (Button) parentView.findViewById(R.id.retry);
         retryBtn.setText("Retry");
         retryBtn.setOnClickListener(this);
+
+        nextBtn = (Button) parentView.findViewById(R.id.next);
+        nextBtn.setText("Next");
+        nextBtn.setOnClickListener(this);
 
         final SharedPreferences pref = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
@@ -158,6 +166,9 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                         Toast.LENGTH_SHORT).show();
             }
 
+        }
+        if (v == nextBtn) {
+            linesDrawer.nextStep();
         }
     }
 
@@ -517,13 +528,17 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             @Override
             protected void onPostExecute(Void exp) {
-                imageView.setImageBitmap(bm);
+//                imageView.setImageBitmap(bm);
+                linesDrawer.setLeaf(new LeafData(bm));
                 preview.setVisibility(View.INVISIBLE);
                 imageView.setVisibility(View.VISIBLE);
                 linesDrawer.setVisibility(View.VISIBLE);
 
                 button.setVisibility(View.INVISIBLE);
-                retryBtn.setVisibility(View.VISIBLE);
+//                retryBtn.setVisibility(View.VISIBLE);
+
+                parentView.findViewById(R.id.shotOrPick).setVisibility(View.INVISIBLE);
+                parentView.findViewById(R.id.retryOrNext).setVisibility(View.VISIBLE);
                 finished = true;
             }
         };

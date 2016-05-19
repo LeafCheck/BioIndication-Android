@@ -1,6 +1,7 @@
 package com.example.skoml.bioindication;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 /**
  * Created by Developer on 5/19/2016.
@@ -23,5 +24,9 @@ public class LeafData {
 
     public int getHeight() {
         return leafImage.getHeight();
+    }
+
+    public void Draw(Canvas canvas) {
+        canvas.drawBitmap(leafImage, 0, 0, null);
     }
 }

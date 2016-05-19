@@ -8,14 +8,12 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.ecometr.app.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +27,13 @@ public class LinesDrawer extends View {
     private boolean roaming = false;
 
     private Paint paint;
+
+    private LeafData leaf = null;
+
+    private Point activeCursor = null;
+    private Point possibleCursor = null;
+    private Point lastPoint = null;
+    private boolean hasMoved = false;
 
     public LinesDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -49,6 +54,11 @@ public class LinesDrawer extends View {
         this(context, null, 0);
     }
 
+    public void setLeaf(LeafData aLeaf) {
+        leaf = aLeaf;
+        invalidate();
+    }
+
     Path path = new Path();
 
     public void reset() {
@@ -60,18 +70,27 @@ public class LinesDrawer extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        path.reset();
-        boolean first = true;
-        final int size = points.size();
-        for (int i = 1; i < size; i += 2) {
-            Point p1 = points.get(i - 1);
-            Point p2 = points.get(i);
-            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
-        }
-        if (size % 2 != 0) {
-            Point p1 = points.get(size - 1);
-            canvas.drawPoint(p1.x, p1.y, paint);
-        }
+
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+        if (leaf != null)
+            leaf.Draw(canvas);
+
+        if (activeCursor != null)
+            canvas.drawPoint(activeCursor.x, activeCursor.y, paint);
+
+//        path.reset();
+//        boolean first = true;
+//        final int size = points.size();
+//        for (int i = 1; i < size; i += 2) {
+//            Point p1 = points.get(i - 1);
+//            Point p2 = points.get(i);
+//            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
+//        }
+//        if (size % 2 != 0) {
+//            Point p1 = points.get(size - 1);
+//            canvas.drawPoint(p1.x, p1.y, paint);
+//        }
     }
 
     @Override
@@ -79,32 +98,29 @@ public class LinesDrawer extends View {
         //Log.v(this.getClass().getName(), "TOUCH " + event.toString() + " " + Arrays.deepToString(points.toArray()));
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            Point point = new Point((int) event.getX(), (int) event.getY());
-            if (points.isEmpty()) {
-                points.add(point);
-            } else {
-                points.set(points.size() - 1, point);
-            }
-            roaming = false;
-            invalidate();
+            possibleCursor = new Point((int) event.getX(), (int) event.getY());
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            Point p = new Point((int) event.getX(), (int) event.getY());
-            if (!roaming) {
-                roaming = true;
-                points.add(p);
-            } else {
-                if (points.isEmpty())
-                    points.add(p);
-                else
-                    points.set(points.size() - 1, p);
+            int deltaX = ((int) event.getX() - lastPoint.x);
+            int deltaY = ((int) event.getY() - lastPoint.y);
+            if ((activeCursor != null) && (deltaX < 10) && (deltaY < 10)) {
+                activeCursor.x = activeCursor.x + deltaX;
+                activeCursor.y = activeCursor.y + deltaY;
             }
+            hasMoved = true;
             invalidate();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            //points.clear();
+            if (!hasMoved) {
+                activeCursor = possibleCursor;
+                invalidate();
+            }
+            hasMoved = false;
         }
 
+        lastPoint = new Point((int) event.getX(), (int) event.getY());
         super.onTouchEvent(event);
         return true;
     }
 
+    public void nextStep() {
+    }
 }
