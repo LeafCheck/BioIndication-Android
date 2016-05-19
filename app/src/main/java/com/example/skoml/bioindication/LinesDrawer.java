@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
+
 import com.ecometr.app.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,7 @@ public class LinesDrawer extends View {
     private boolean roaming = false;
 
     private Paint paint;
+
     public LinesDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -46,15 +49,14 @@ public class LinesDrawer extends View {
         this(context, null, 0);
     }
 
-
     Path path = new Path();
 
-    public void reset(){
+    public void reset() {
         path.reset();
         points.clear();
         invalidate();
-
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -76,7 +78,7 @@ public class LinesDrawer extends View {
     public boolean onTouchEvent(MotionEvent event) {
         //Log.v(this.getClass().getName(), "TOUCH " + event.toString() + " " + Arrays.deepToString(points.toArray()));
 
-        if(event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Point point = new Point((int) event.getX(), (int) event.getY());
             if (points.isEmpty()) {
                 points.add(point);
@@ -85,24 +87,19 @@ public class LinesDrawer extends View {
             }
             roaming = false;
             invalidate();
-        }
-        else
-
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             Point p = new Point((int) event.getX(), (int) event.getY());
             if (!roaming) {
                 roaming = true;
                 points.add(p);
             } else {
-                if(points.isEmpty())
+                if (points.isEmpty())
                     points.add(p);
                 else
                     points.set(points.size() - 1, p);
             }
             invalidate();
-        }
-        else if (event.getAction() == MotionEvent.ACTION_UP)
-        {
+        } else if (event.getAction() == MotionEvent.ACTION_UP) {
             //points.clear();
         }
 

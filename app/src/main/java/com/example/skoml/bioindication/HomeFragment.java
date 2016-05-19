@@ -53,14 +53,13 @@ import java.util.TimerTask;
 import Effects.Effect;
 import Effects.eEdgeDetection;
 
-public class HomeFragment extends Fragment implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback
-{
+public class HomeFragment extends Fragment implements SurfaceHolder.Callback, View.OnClickListener, Camera.PictureCallback, Camera.PreviewCallback, Camera.AutoFocusCallback {
     private Camera camera;
     private SurfaceHolder surfaceHolder;
     private SurfaceView preview;
     private Button shotBtn, retryBtn, pickBtn;
     //private ImageView leaf;
-    private View  parentView;
+    private View parentView;
 
 
     ImageView imageView;
@@ -93,38 +92,35 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
         imageView = (ImageView) parentView.findViewById(R.id.imageView);
         linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
-        retryBtn  = (Button) parentView.findViewById(R.id.retry);
+        retryBtn = (Button) parentView.findViewById(R.id.retry);
         retryBtn.setText("Retry");
         retryBtn.setOnClickListener(this);
 
         final SharedPreferences pref = PreferenceManager
                 .getDefaultSharedPreferences(getActivity());
 
-       if( pref.getBoolean("useRuler", false))
-          parentView.findViewById(R.id.ruler_view).setVisibility(View.VISIBLE);
+        if (pref.getBoolean("useRuler", false))
+            parentView.findViewById(R.id.ruler_view).setVisibility(View.VISIBLE);
 
 
         return parentView;
     }
 
     @Override
-    public void onClick(View v)
-    {
-        if (v == shotBtn)
-        {
+    public void onClick(View v) {
+        if (v == shotBtn) {
             // либо делаем снимок непосредственно здесь
             // 	либо включаем обработчик автофокуса
 
             List<String> supportedFocusModes = camera.getParameters().getSupportedFocusModes();
             boolean hasAutoFocus = supportedFocusModes != null && supportedFocusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO);
-            if(hasAutoFocus)
+            if (hasAutoFocus)
                 camera.autoFocus(this);
             else
                 camera.takePicture(null, null, null, this);
 
         }
-        if (v == retryBtn)
-        {
+        if (v == retryBtn) {
 
 
             timer.cancel();
@@ -140,14 +136,13 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
             camera.startPreview();
-            if(bm!=null)
+            if (bm != null)
                 bm.recycle();
             bm = null;
 
 
         }
-        if (v == pickBtn)
-        {
+        if (v == pickBtn) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -155,8 +150,8 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                 startActivityForResult(
                         Intent.createChooser(intent, "Select Photo"),
                         FILE_SELECT_CODE);
-               if(camera!=null)
-                   camera.stopPreview();
+                if (camera != null)
+                    camera.stopPreview();
             } catch (Exception ex) {
                 // Potentially direct the user to the Market with a Dialog
                 Toast.makeText(getActivity(), ex.toString(),
@@ -200,7 +195,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
     public String getPath(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-            String[] projection = {MediaStore.Images.Media.DATA };
+            String[] projection = {MediaStore.Images.Media.DATA};
             Cursor cursor = null;
 
             try {
@@ -216,22 +211,22 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                 e.printStackTrace();
                 // Eat it
             }
-            if(cursor!=null)
+            if (cursor != null)
                 cursor.close();
-        }
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 
         return null;
     }
+
     private byte[] getIcon(Context context, String fileName) {
-        try{
+        try {
             File dst = new File(fileName);
             if (!dst.exists())
                 return null;
 
-            if(dst.length() == 0)
+            if (dst.length() == 0)
                 return new byte[0];
 
             FileInputStream inStream = new FileInputStream(dst);
@@ -242,7 +237,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
             inChannel.close();
             inStream.close();
             return buffer.array();
-        } catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return null;
@@ -250,21 +245,20 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
 
     @Override
-    public void onResume()
-    {
-             super.onResume();
+    public void onResume() {
+        super.onResume();
 
-            if(camera == null)
+        if (camera == null)
             camera = Camera.open();
-            if(camera!=null)
-                setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
+        if (camera != null)
+            setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
 
         PackageManager pm = getActivity().getPackageManager();
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         final List<ResolveInfo> pkgAppsList = pm.queryIntentActivities(intent, 0);
-        if(pkgAppsList==null || pkgAppsList.size()==0)
+        if (pkgAppsList == null || pkgAppsList.size() == 0)
             pickBtn.setVisibility(View.GONE);
         else {
             if (pickBtn.getVisibility() == View.GONE)
@@ -275,15 +269,13 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
         super.onPause();
 
-        if(bm!=null)
-          bm.recycle();
+        if (bm != null)
+            bm.recycle();
         bm = null;
-        if (camera != null)
-        {
+        if (camera != null) {
             camera.setPreviewCallback(null);
             camera.stopPreview();
             camera.release();
@@ -358,19 +350,15 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     }
 
 
-
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int previewSurfaceWidth, int previewSurfaceHeight)
-    {
+    public void surfaceChanged(SurfaceHolder holder, int format, int previewSurfaceWidth, int previewSurfaceHeight) {
 
     }
 
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder)
-    {
-        try
-        {
+    public void surfaceCreated(SurfaceHolder holder) {
+        try {
             camera.setPreviewDisplay(holder);
             camera.setPreviewCallback(this);
 
@@ -384,16 +372,13 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             // здесь корректируем размер отображаемого preview, чтобы не было искажений
 
-            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE)
-            {
+            if (this.getResources().getConfiguration().orientation != Configuration.ORIENTATION_LANDSCAPE) {
                 // портретный вид
                 camera.setDisplayOrientation(90);
                 lp.height = previewSurfaceHeight;
                 lp.width = (int) (previewSurfaceHeight / aspect);
                 ;
-            }
-            else
-            {
+            } else {
                 // ландшафтный
                 camera.setDisplayOrientation(0);
                 lp.width = previewSurfaceWidth;
@@ -402,23 +387,19 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             preview.setLayoutParams(lp);
             camera.startPreview();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder)
-    {
+    public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
 
     @Override
-    public void onPictureTaken(byte[] paramArrayOfByte, final Camera paramCamera)
-    {
+    public void onPictureTaken(byte[] paramArrayOfByte, final Camera paramCamera) {
 
         paramCamera.stopPreview();
 
@@ -427,29 +408,23 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     }
 
 
-
     @Override
-    public void onAutoFocus(boolean paramBoolean, Camera paramCamera)
-    {
-        if (paramBoolean)
-        {
+    public void onAutoFocus(boolean paramBoolean, Camera paramCamera) {
+        if (paramBoolean) {
             // если удалось сфокусироваться, делаем снимок
             paramCamera.takePicture(null, null, null, this);
         }
     }
 
     @Override
-    public void onPreviewFrame(byte[] paramArrayOfByte, Camera paramCamera)
-    {
+    public void onPreviewFrame(byte[] paramArrayOfByte, Camera paramCamera) {
         // здесь можно обрабатывать изображение, показываемое в preview
     }
 
 
-
-
-    private void showResult(int value){
+    private void showResult(int value) {
         int icon;
-        switch (value){
+        switch (value) {
             case 0: //very happy
                 icon = R.drawable.ic_sentiment_very_satisfied_black_48px;
                 break;
@@ -470,95 +445,89 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                 break;
         }
 
-        Drawable dr =  getResources().getDrawable(icon);
+        Drawable dr = getResources().getDrawable(icon);
         dr = DrawableCompat.wrap(dr);
         DrawableCompat.setTint(dr.mutate(), Color.WHITE);
 
         new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_DARK).
                 setTitle("Result").
                 setIcon(dr).
-                setMessage(String.format("The quality of the environment: %d from 5",  (5-value))).show();
+                setMessage(String.format("The quality of the environment: %d from 5", (5 - value))).show();
 
     }
 
 
-    void processPicture(final byte[] paramArrayOfByte, final Camera paramCamera)
-    {
+    void processPicture(final byte[] paramArrayOfByte, final Camera paramCamera) {
 
-        if(bm!=null)
+        if (bm != null)
             bm.recycle();
         bm = null;
 
-            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
-                boolean finished = false;
-                @Override
-                public void onPreExecute(){
+            boolean finished = false;
+
+            @Override
+            public void onPreExecute() {
 
 
-                    parentView.findViewById(R.id.shotOrPick).setVisibility(View.INVISIBLE);
+                parentView.findViewById(R.id.shotOrPick).setVisibility(View.INVISIBLE);
 
-                    button.setVisibility(View.VISIBLE);
-                    button.startAnimating();
-                    timer = new Timer();
-                    timer.schedule(new TimerTask() {
-                        @Override
-                        public void run() {
-                            publishProgress(null);
-                        }
-                    }, 25, 25);
-                }
+                button.setVisibility(View.VISIBLE);
+                button.startAnimating();
+                timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        publishProgress(null);
+                    }
+                }, 25, 25);
+            }
 
-                @Override
-                protected void onProgressUpdate(Void...values){
-                    super.onProgressUpdate(values);
-                    if(button.getProgress()<99)
-                        button.setProgress(button.getProgress() + 1);
+            @Override
+            protected void onProgressUpdate(Void... values) {
+                super.onProgressUpdate(values);
+                if (button.getProgress() < 99)
+                    button.setProgress(button.getProgress() + 1);
+                else {
+                    if (!finished)
+                        button.setProgress(0);
+
                     else {
-                        if (!finished)
-                            button.setProgress(0);
-                        
-                        else {
-                            if(button.getProgress()==99)
-                                button.setProgress(100);
-                        }
+                        if (button.getProgress() == 99)
+                            button.setProgress(100);
                     }
                 }
+            }
 
-                @Override
-                protected Void doInBackground(Void... params) {
-                    final BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, options);//.decodeResource(res, resId, options);
+            @Override
+            protected Void doInBackground(Void... params) {
+                final BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, options);//.decodeResource(res, resId, options);
 
-                    bm = BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, null);
-                    Matrix mtx = new Matrix();
-                    mtx.postRotate(90);
-                    bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), mtx, false);
+                bm = BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, null);
+                Matrix mtx = new Matrix();
+                mtx.postRotate(90);
+                bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), mtx, false);
 
-                    return null;
-                }
-
-
-                @Override
-                protected void onPostExecute(Void exp) {
-                    imageView.setImageBitmap(bm);
-                    preview.setVisibility(View.INVISIBLE);
-                    imageView.setVisibility(View.VISIBLE);
-                    linesDrawer.setVisibility(View.VISIBLE);
-
-                    button.setVisibility(View.INVISIBLE);
-                    retryBtn.setVisibility(View.VISIBLE);
-                    finished = true;
-                }
-            };
-            task.execute();
+                return null;
+            }
 
 
+            @Override
+            protected void onPostExecute(Void exp) {
+                imageView.setImageBitmap(bm);
+                preview.setVisibility(View.INVISIBLE);
+                imageView.setVisibility(View.VISIBLE);
+                linesDrawer.setVisibility(View.VISIBLE);
 
-
-
-
+                button.setVisibility(View.INVISIBLE);
+                retryBtn.setVisibility(View.VISIBLE);
+                finished = true;
+            }
+        };
+        task.execute();
     }
 
 
@@ -575,7 +544,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
-        Bitmap bm =BitmapFactory.decodeByteArray(arr, 0, arr.length, options);
+        Bitmap bm = BitmapFactory.decodeByteArray(arr, 0, arr.length, options);
 
         //new File(path).delete();
         return bm;
