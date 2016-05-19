@@ -521,15 +521,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                         else {
                             if(button.getProgress()==99)
                                 button.setProgress(100);
-                            else
-                            {
-                                preview.setVisibility(View.INVISIBLE);
-                                imageView.setVisibility(View.VISIBLE);
-                                linesDrawer.setVisibility(View.VISIBLE);
-
-                                button.setVisibility(View.INVISIBLE);
-                                retryBtn.setVisibility(View.VISIBLE);
-                            }
                         }
                     }
                 }
@@ -552,6 +543,12 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
                 @Override
                 protected void onPostExecute(Void exp) {
                     imageView.setImageBitmap(bm);
+                    preview.setVisibility(View.INVISIBLE);
+                    imageView.setVisibility(View.VISIBLE);
+                    linesDrawer.setVisibility(View.VISIBLE);
+
+                    button.setVisibility(View.INVISIBLE);
+                    retryBtn.setVisibility(View.VISIBLE);
                     finished = true;
                 }
             };
