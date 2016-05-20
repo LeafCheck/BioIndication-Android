@@ -23,6 +23,7 @@ public class LinesDrawer extends View {
 
     private Paint paint;
     private LeafData leaf = null;
+    private LeafDataBuilder builder = null;
     private Point activeCursor = null;
     private Point possibleCursor = null;
     private Point lastPoint = null;
@@ -49,6 +50,7 @@ public class LinesDrawer extends View {
 
     public void setLeaf(LeafData aLeaf) {
         leaf = aLeaf;
+        builder = new LeafDataBuilder(leaf);
         invalidate();
     }
 
@@ -92,6 +94,9 @@ public class LinesDrawer extends View {
     }
 
     public void nextStep() {
+        if (activeCursor != null)
+            builder.processPoint(activeCursor);
+
         activeCursor = null;
         possibleCursor = null;
         hasMoved = false;
