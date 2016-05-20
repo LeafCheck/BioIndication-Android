@@ -61,9 +61,8 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private Button pickBtn;
     private Button nextBtn;
     private View parentView;
-
-    LinesDrawer linesDrawer;
-    Bitmap bm;
+    private LinesDrawer linesDrawer;
+    private LeafData leafData = null;
 
     ArrowDownloadButton button;
     Timer timer;
@@ -123,24 +122,18 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
         }
         if (v == retryBtn) {
-
-
             timer.cancel();
             button.reset();
-            linesDrawer.reset();
             linesDrawer.setVisibility(View.INVISIBLE);
             parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
             parentView.findViewById(R.id.retryOrNext).setVisibility(View.INVISIBLE);
-
             preview.setVisibility(View.VISIBLE);
+
+            leafData = null;
+            linesDrawer.setLeaf(leafData);
 
             setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
             camera.startPreview();
-            if (bm != null)
-                bm.recycle();
-            bm = null;
-
-
         }
         if (v == pickBtn) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -275,9 +268,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     public void onPause() {
         super.onPause();
 
-        if (bm != null)
-            bm.recycle();
-        bm = null;
         if (camera != null) {
             camera.setPreviewCallback(null);
             camera.stopPreview();
@@ -461,11 +451,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
 
     void processPicture(final byte[] paramArrayOfByte, final Camera paramCamera) {
-
-        if (bm != null)
-            bm.recycle();
-        bm = null;
-
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
             boolean finished = false;
@@ -507,20 +492,20 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
             protected Void doInBackground(Void... params) {
                 final BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inJustDecodeBounds = true;
-                BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, options);//.decodeResource(res, resId, options);
+                BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, options);
 
-                bm = BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, null);
+                Bitmap bm = BitmapFactory.decodeByteArray(paramArrayOfByte, 0, paramArrayOfByte.length, null);
                 Matrix mtx = new Matrix();
                 mtx.postRotate(90);
                 bm = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), mtx, false);
-
+                leafData = new LeafData(bm);
                 return null;
             }
 
 
             @Override
             protected void onPostExecute(Void exp) {
-                linesDrawer.setLeaf(new LeafData(bm));
+                linesDrawer.setLeaf(leafData);
 
                 preview.setVisibility(View.INVISIBLE);
                 button.setVisibility(View.INVISIBLE);

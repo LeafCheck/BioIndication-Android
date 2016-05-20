@@ -61,12 +61,6 @@ public class LinesDrawer extends View {
 
     Path path = new Path();
 
-    public void reset() {
-        path.reset();
-        points.clear();
-        invalidate();
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
