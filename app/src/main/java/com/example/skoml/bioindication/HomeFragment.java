@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ecometr.app.R;
@@ -61,9 +60,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private Button retryBtn;
     private Button pickBtn;
     private Button nextBtn;
-    //private ImageView leaf;
     private View parentView;
-
 
     LinesDrawer linesDrawer;
     Bitmap bm;
@@ -89,7 +86,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         pickBtn = (Button) parentView.findViewById(R.id.pick);
         pickBtn.setText("Pick file");
         pickBtn.setOnClickListener(this);
-        //leaf = (ImageView) parentView.findViewById(R.id.leaf);
 
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
         linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
@@ -133,11 +129,10 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
             button.reset();
             linesDrawer.reset();
             linesDrawer.setVisibility(View.INVISIBLE);
-            retryBtn.setVisibility(View.INVISIBLE);
-
+            parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
+            parentView.findViewById(R.id.retryOrNext).setVisibility(View.INVISIBLE);
 
             preview.setVisibility(View.VISIBLE);
-            parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
 
             setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
             camera.startPreview();
@@ -525,13 +520,11 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             @Override
             protected void onPostExecute(Void exp) {
-//                imageView.setImageBitmap(bm);
                 linesDrawer.setLeaf(new LeafData(bm));
-                preview.setVisibility(View.INVISIBLE);
-                linesDrawer.setVisibility(View.VISIBLE);
 
+                preview.setVisibility(View.INVISIBLE);
                 button.setVisibility(View.INVISIBLE);
-//                retryBtn.setVisibility(View.VISIBLE);
+                linesDrawer.setVisibility(View.VISIBLE);
 
                 parentView.findViewById(R.id.shotOrPick).setVisibility(View.INVISIBLE);
                 parentView.findViewById(R.id.retryOrNext).setVisibility(View.VISIBLE);
