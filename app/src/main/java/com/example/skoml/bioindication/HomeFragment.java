@@ -65,7 +65,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
     private View parentView;
 
 
-    ImageView imageView;
     LinesDrawer linesDrawer;
     Bitmap bm;
 
@@ -93,7 +92,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         //leaf = (ImageView) parentView.findViewById(R.id.leaf);
 
         button = (ArrowDownloadButton) parentView.findViewById(R.id.arrow_button);
-        imageView = (ImageView) parentView.findViewById(R.id.imageView);
         linesDrawer = (LinesDrawer) parentView.findViewById(R.id.lines_drawer);
 
         retryBtn = (Button) parentView.findViewById(R.id.retry);
@@ -133,7 +131,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
             timer.cancel();
             button.reset();
-            imageView.setVisibility(View.INVISIBLE);
             linesDrawer.reset();
             linesDrawer.setVisibility(View.INVISIBLE);
             retryBtn.setVisibility(View.INVISIBLE);
@@ -531,7 +528,6 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 //                imageView.setImageBitmap(bm);
                 linesDrawer.setLeaf(new LeafData(bm));
                 preview.setVisibility(View.INVISIBLE);
-                imageView.setVisibility(View.VISIBLE);
                 linesDrawer.setVisibility(View.VISIBLE);
 
                 button.setVisibility(View.INVISIBLE);
