@@ -1,6 +1,8 @@
 package com.example.skoml.bioindication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -50,7 +52,7 @@ public class LinesDrawer extends View {
 
     public void setLeaf(LeafData aLeaf) {
         leaf = aLeaf;
-        builder = new LeafDataBuilder(leaf);
+        builder = new LeafDataBuilder(leaf, getContext());
         invalidate();
     }
 
@@ -58,13 +60,13 @@ public class LinesDrawer extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int width = canvas.getWidth();
-        int height = canvas.getHeight();
         if (leaf != null)
             leaf.Draw(canvas);
 
         if (activeCursor != null)
             canvas.drawPoint(activeCursor.x, activeCursor.y, paint);
+
+        canvas.drawBitmap(builder.getStateImage(), 10, 10, null);
     }
 
     @Override
