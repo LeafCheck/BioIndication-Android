@@ -21,15 +21,8 @@ import java.util.List;
  */
 public class LinesDrawer extends View {
 
-
-    private final List<Point> points = new ArrayList<Point>();
-
-    private boolean roaming = false;
-
     private Paint paint;
-
     private LeafData leaf = null;
-
     private Point activeCursor = null;
     private Point possibleCursor = null;
     private Point lastPoint = null;
@@ -59,8 +52,6 @@ public class LinesDrawer extends View {
         invalidate();
     }
 
-    Path path = new Path();
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -72,35 +63,20 @@ public class LinesDrawer extends View {
 
         if (activeCursor != null)
             canvas.drawPoint(activeCursor.x, activeCursor.y, paint);
-
-//        path.reset();
-//        boolean first = true;
-//        final int size = points.size();
-//        for (int i = 1; i < size; i += 2) {
-//            Point p1 = points.get(i - 1);
-//            Point p2 = points.get(i);
-//            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint);
-//        }
-//        if (size % 2 != 0) {
-//            Point p1 = points.get(size - 1);
-//            canvas.drawPoint(p1.x, p1.y, paint);
-//        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //Log.v(this.getClass().getName(), "TOUCH " + event.toString() + " " + Arrays.deepToString(points.toArray()));
-
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             possibleCursor = new Point((int) event.getX(), (int) event.getY());
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             int deltaX = ((int) event.getX() - lastPoint.x);
             int deltaY = ((int) event.getY() - lastPoint.y);
-            if ((activeCursor != null) && (deltaX < 10) && (deltaY < 10)) {
-                activeCursor.x = activeCursor.x + deltaX;
-                activeCursor.y = activeCursor.y + deltaY;
+            if ((activeCursor != null)) {
+                activeCursor.x = activeCursor.x + (deltaX / 2);
+                activeCursor.y = activeCursor.y + (deltaY / 2);
+                hasMoved = true;
             }
-            hasMoved = true;
             invalidate();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             if (!hasMoved) {
@@ -116,5 +92,9 @@ public class LinesDrawer extends View {
     }
 
     public void nextStep() {
+        activeCursor = null;
+        possibleCursor = null;
+        hasMoved = false;
+        invalidate();
     }
 }
