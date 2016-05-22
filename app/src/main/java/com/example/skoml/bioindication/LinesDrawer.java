@@ -1,22 +1,15 @@
 package com.example.skoml.bioindication;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.ecometr.app.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by skoml on 03.05.2016.
@@ -67,6 +60,13 @@ public class LinesDrawer extends View {
             canvas.drawPoint(activeCursor.x, activeCursor.y, paint);
 
         canvas.drawBitmap(builder.getStateImage(), 10, 10, null);
+
+//        Point middle = builder.getLeafMiddle();
+//        if (middle != null) {
+//            canvas.drawPoint(middle.x, middle.y, paint);
+//            Point right = builder.getLeafSidePoint(-200);
+//            canvas.drawLine(middle.x, middle.y, right.x, right.y, paint);
+//        }
     }
 
     @Override
@@ -90,6 +90,7 @@ public class LinesDrawer extends View {
             hasMoved = false;
         }
 
+        activeCursor = builder.fixPointPosition(activeCursor);
         lastPoint = new Point((int) event.getX(), (int) event.getY());
         super.onTouchEvent(event);
         return true;
