@@ -26,7 +26,4 @@ public class LeafData {
         return leafImage.getHeight();
     }
 
-    public void Draw(Canvas canvas) {
-        canvas.drawBitmap(leafImage, 0, 0, null);
-    }
 }

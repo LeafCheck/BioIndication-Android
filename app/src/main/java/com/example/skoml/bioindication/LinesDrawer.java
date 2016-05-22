@@ -30,7 +30,7 @@ public class LinesDrawer extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(getResources().getDimension(R.dimen.path_width));
         paint.setColor(Color.WHITE);
-        paint.setAlpha(100);
+        paint.setAlpha(255);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeJoin(Paint.Join.ROUND);
     }
@@ -53,20 +53,15 @@ public class LinesDrawer extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (leaf != null)
-            leaf.Draw(canvas);
-
+        builder.drawState(canvas);
         if (activeCursor != null)
-            canvas.drawPoint(activeCursor.x, activeCursor.y, paint);
+            drawPointer(canvas);
+    }
 
-        canvas.drawBitmap(builder.getStateImage(), 10, 10, null);
-
-//        Point middle = builder.getLeafMiddle();
-//        if (middle != null) {
-//            canvas.drawPoint(middle.x, middle.y, paint);
-//            Point right = builder.getLeafSidePoint(-200);
-//            canvas.drawLine(middle.x, middle.y, right.x, right.y, paint);
-//        }
+    private void drawPointer(Canvas canvas) {
+        float size = getResources().getDimension(R.dimen.pointer_size);
+        canvas.drawLine(activeCursor.x - size, activeCursor.y, activeCursor.x + size, activeCursor.y, paint);
+        canvas.drawLine(activeCursor.x, activeCursor.y - size, activeCursor.x, activeCursor.y + size, paint);
     }
 
     private long tapTimer;

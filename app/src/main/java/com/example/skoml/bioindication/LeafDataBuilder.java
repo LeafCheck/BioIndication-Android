@@ -3,6 +3,7 @@ package com.example.skoml.bioindication;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Point;
 import android.util.Log;
 
@@ -30,10 +31,10 @@ public class LeafDataBuilder {
     public Point secondRightVeinEnd = null;
 
     public int getDistance(Point a, Point b) {
-        int d = (int)Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
+        int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
         if ((a.x < b.x) && (a.y < b.y))
             d = -d;
-        return  d;
+        return d;
     }
 
     public Point getLeafMiddle() {
@@ -42,8 +43,7 @@ public class LeafDataBuilder {
             p.x = top.x + ((bottom.x - top.x) / 2);
             p.y = top.y + ((bottom.y - top.y) / 2);
             return p;
-        }
-        else
+        } else
             return null;
     }
 
@@ -56,8 +56,8 @@ public class LeafDataBuilder {
 
         Point p = new Point();
         Point m = getLeafMiddle();
-        p.x = (int)Math.round(m.x + distance * Math.cos(angle));
-        p.y = (int)Math.round(m.y + distance * Math.sin(angle));
+        p.x = (int) Math.round(m.x + distance * Math.cos(angle));
+        p.y = (int) Math.round(m.y + distance * Math.sin(angle));
         return p;
     }
 
@@ -76,10 +76,6 @@ public class LeafDataBuilder {
         state.nextStep(this);
     }
 
-    public Bitmap getStateImage() {
-        return state.getStateImage(this);
-    }
-
     public Bitmap loadImage(int resId) {
         return BitmapFactory.decodeResource(context.getResources(), resId);
     }
@@ -90,5 +86,10 @@ public class LeafDataBuilder {
 
     public void logPoint(String name, Point point) {
         Log.v(name, "(" + Integer.toString(point.x) + ", " + Integer.toString(point.y) + ")");
+    }
+
+    public void drawState(Canvas canvas) {
+        canvas.drawBitmap(leafData.getImage(), 0, 0, null);
+        canvas.drawBitmap(state.getStateImage(this), 10, 10, null);
     }
 }
