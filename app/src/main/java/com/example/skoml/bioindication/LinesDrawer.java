@@ -69,10 +69,13 @@ public class LinesDrawer extends View {
 //        }
     }
 
+    private long tapTimer;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             possibleCursor = new Point((int) event.getX(), (int) event.getY());
+            tapTimer = System.currentTimeMillis();
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             int deltaX = ((int) event.getX() - lastPoint.x);
             int deltaY = ((int) event.getY() - lastPoint.y);
@@ -81,17 +84,16 @@ public class LinesDrawer extends View {
                 activeCursor.y = activeCursor.y + (deltaY / 2);
                 hasMoved = true;
             }
-            invalidate();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (!hasMoved) {
+            if (!hasMoved || ((System.currentTimeMillis() - tapTimer) < 100)) {
                 activeCursor = possibleCursor;
-                invalidate();
             }
             hasMoved = false;
         }
 
         activeCursor = builder.fixPointPosition(activeCursor);
         lastPoint = new Point((int) event.getX(), (int) event.getY());
+        invalidate();
         super.onTouchEvent(event);
         return true;
     }
