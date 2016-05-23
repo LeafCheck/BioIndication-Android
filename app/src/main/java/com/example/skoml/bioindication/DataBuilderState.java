@@ -35,7 +35,7 @@ class TopState extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.top = point;
+        builder.setTop(point);
     }
 
     @Override
@@ -56,7 +56,7 @@ class BottomState extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.bottom = point;
+        builder.setBottom(point);
     }
 
     @Override
@@ -96,7 +96,7 @@ class CenterState extends MiddleState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.center = point;
+        builder.setCenter(point);
     }
 
     @Override
@@ -118,7 +118,7 @@ class LeftSide extends MiddleState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.left = point;
+        builder.setLeft(point);
     }
 
     @Override
@@ -139,7 +139,7 @@ class RightSide extends MiddleState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.right = point;
+        builder.setRight(point);
     }
 
     @Override
@@ -161,7 +161,7 @@ class FirstLeftVeinBegin extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.firstLeftVeinBegin = point;
+        builder.setFirstLeftVeinBegin(point);
     }
 
     @Override
@@ -182,7 +182,7 @@ class FirstLeftVeinEnd extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.firstLeftVeinEnd = point;
+        builder.setFirstLeftVeinEnd(point);
     }
 
     @Override
@@ -203,7 +203,7 @@ class FirstRightVeinBegin extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.firstRightVeinBegin = point;
+        builder.setFirstRightVeinBegin(point);
     }
 
     @Override
@@ -224,7 +224,7 @@ class FirstRightVeinEnd extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.firstRightVeinEnd = point;
+        builder.setFirstRightVeinEnd(point);
     }
 
     @Override
@@ -245,7 +245,7 @@ class SecondLeftVeinBegin extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.secondLeftVeinBegin = point;
+        builder.setSecondLeftVeinBegin(point);
     }
 
     @Override
@@ -266,7 +266,7 @@ class SecondLeftVeinEnd extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.secondLeftVeinEnd = point;
+        builder.setSecondLeftVeinEnd(point);
     }
 
     @Override
@@ -287,7 +287,7 @@ class SecondRightVeinBegin extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.secondRightVeinBegin = point;
+        builder.setSecondRightVeinBegin(point);
     }
 
     @Override
@@ -308,7 +308,7 @@ class SecondRightVeinEnd extends  DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
-        builder.secondRightVeinEnd = point;
+        builder.setSecondRightVeinEnd(point);
     }
 
     @Override

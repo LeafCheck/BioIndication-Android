@@ -15,21 +15,6 @@ public class LeafDataBuilder {
     private DataBuilderState state = null;
     private Context context = null;
 
-    // key points
-    public Point top = null;
-    public Point bottom = null;
-    public Point center = null;
-    public Point right = null;
-    public Point left = null;
-    public Point firstLeftVeinBegin = null;
-    public Point firstLeftVeinEnd = null;
-    public Point firstRightVeinBegin = null;
-    public Point firstRightVeinEnd = null;
-    public Point secondLeftVeinBegin = null;
-    public Point secondLeftVeinEnd = null;
-    public Point secondRightVeinBegin = null;
-    public Point secondRightVeinEnd = null;
-
     public int getDistance(Point a, Point b) {
         int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
         if ((a.x < b.x) && (a.y < b.y))
@@ -38,10 +23,10 @@ public class LeafDataBuilder {
     }
 
     public Point getLeafMiddle() {
-        if ((top != null) && (bottom != null)) {
+        if ((getTop() != null) && (getBottom() != null)) {
             Point p = new Point();
-            p.x = top.x + ((bottom.x - top.x) / 2);
-            p.y = top.y + ((bottom.y - top.y) / 2);
+            p.x = getTop().x + ((getBottom().x - getTop().x) / 2);
+            p.y = getTop().y + ((getBottom().y - getTop().y) / 2);
             return p;
         } else
             return null;
@@ -49,8 +34,8 @@ public class LeafDataBuilder {
 
     public Point getLeafSidePoint(int distance) {
         double angle;
-        if ((bottom.x - top.x) != 0)
-            angle = Math.atan((top.y - bottom.y) / (top.x - bottom.x)) - (Math.PI / 2);
+        if ((getBottom().x - getTop().x) != 0)
+            angle = Math.atan((getTop().y - getBottom().y) / (getTop().x - getBottom().x)) - (Math.PI / 2);
         else
             angle = -(Math.PI / 2);
 
@@ -91,5 +76,109 @@ public class LeafDataBuilder {
     public void drawState(Canvas canvas) {
         canvas.drawBitmap(leafData.getImage(), 0, 0, null);
         canvas.drawBitmap(state.getStateImage(this), 10, 10, null);
+    }
+
+    public Point getTop() {
+        return leafData.top;
+    }
+
+    public void setTop(Point top) {
+        this.leafData.top = top;
+    }
+
+    public Point getBottom() {
+        return leafData.bottom;
+    }
+
+    public void setBottom(Point bottom) {
+        this.leafData.bottom = bottom;
+    }
+
+    public Point getCenter() {
+        return leafData.center;
+    }
+
+    public void setCenter(Point center) {
+        this.leafData.center = center;
+    }
+
+    public Point getRight() {
+        return leafData.right;
+    }
+
+    public void setRight(Point right) {
+        this.leafData.right = right;
+    }
+
+    public Point getLeft() {
+        return leafData.left;
+    }
+
+    public void setLeft(Point left) {
+        this.leafData.left = left;
+    }
+
+    public Point getFirstLeftVeinBegin() {
+        return leafData.firstLeftVeinBegin;
+    }
+
+    public void setFirstLeftVeinBegin(Point firstLeftVeinBegin) {
+        this.leafData.firstLeftVeinBegin = firstLeftVeinBegin;
+    }
+
+    public Point getFirstLeftVeinEnd() {
+        return leafData.firstLeftVeinEnd;
+    }
+
+    public void setFirstLeftVeinEnd(Point firstLeftVeinEnd) {
+        this.leafData.firstLeftVeinEnd = firstLeftVeinEnd;
+    }
+
+    public Point getFirstRightVeinBegin() {
+        return leafData.firstRightVeinBegin;
+    }
+
+    public void setFirstRightVeinBegin(Point firstRightVeinBegin) {
+        this.leafData.firstRightVeinBegin = firstRightVeinBegin;
+    }
+
+    public Point getFirstRightVeinEnd() {
+        return leafData.firstRightVeinEnd;
+    }
+
+    public void setFirstRightVeinEnd(Point firstRightVeinEnd) {
+        this.leafData.firstRightVeinEnd = firstRightVeinEnd;
+    }
+
+    public Point getSecondLeftVeinBegin() {
+        return leafData.secondLeftVeinBegin;
+    }
+
+    public void setSecondLeftVeinBegin(Point secondLeftVeinBegin) {
+        this.leafData.secondLeftVeinBegin = secondLeftVeinBegin;
+    }
+
+    public Point getSecondLeftVeinEnd() {
+        return leafData.secondLeftVeinEnd;
+    }
+
+    public void setSecondLeftVeinEnd(Point secondLeftVeinEnd) {
+        this.leafData.secondLeftVeinEnd = secondLeftVeinEnd;
+    }
+
+    public Point getSecondRightVeinBegin() {
+        return leafData.secondRightVeinBegin;
+    }
+
+    public void setSecondRightVeinBegin(Point secondRightVeinBegin) {
+        this.leafData.secondRightVeinBegin = secondRightVeinBegin;
+    }
+
+    public Point getSecondRightVeinEnd() {
+        return leafData.secondRightVeinEnd;
+    }
+
+    public void setSecondRightVeinEnd(Point secondRightVeinEnd) {
+        this.leafData.secondRightVeinEnd = secondRightVeinEnd;
     }
 }
