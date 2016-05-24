@@ -53,7 +53,6 @@ public class LeafDataBuilder {
         this.leafData = leafData;
         this.context = context;
         setState(new TopState());
-        leafMatrix.postTranslate(200, 200);
     }
 
     public void setState(DataBuilderState state) {
@@ -69,7 +68,7 @@ public class LeafDataBuilder {
         return BitmapFactory.decodeResource(context.getResources(), resId);
     }
 
-    public Point fixPointPosition(Point point) {
+    public Point adjustPointerPosition(Point point) {
         return state.fixPointPosition(this, point);
     }
 
@@ -80,6 +79,10 @@ public class LeafDataBuilder {
     public void drawState(Canvas canvas) {
         canvas.drawBitmap(leafData.getImage(), leafMatrix, null);
         canvas.drawBitmap(state.getStateImage(this), 10, 10, null);
+    }
+
+    public void panLeafImage(int x, int y) {
+        leafMatrix.postTranslate(x, y);
     }
 
     private Point MapPoint(Point p, Boolean inverse) {

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,6 +24,7 @@ public class LinesDrawer extends View {
     private Point possibleCursor = null;
     private Point lastPoint = null;
     private boolean hasMoved = false;
+    private boolean isPanMode = false;
 
     public LinesDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -68,25 +70,35 @@ public class LinesDrawer extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        int action = MotionEventCompat.getActionMasked(event);
+
+        if (action == MotionEvent.ACTION_DOWN) {
             possibleCursor = new Point((int) event.getX(), (int) event.getY());
             tapTimer = System.currentTimeMillis();
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+        } else if (action == MotionEvent.ACTION_POINTER_DOWN) {
+            isPanMode = true;
+        } else if (action == MotionEvent.ACTION_POINTER_UP) {
+            isPanMode = false;
+        } else if (action == MotionEvent.ACTION_MOVE) {
             int deltaX = ((int) event.getX() - lastPoint.x);
             int deltaY = ((int) event.getY() - lastPoint.y);
-            if ((activeCursor != null)) {
-                activeCursor.x = activeCursor.x + (deltaX / 2);
-                activeCursor.y = activeCursor.y + (deltaY / 2);
-                hasMoved = true;
+            if (isPanMode) {
+                builder.panLeafImage(deltaX, deltaY);
+            } else {
+                if ((activeCursor != null)) {
+                    activeCursor.x = activeCursor.x + (deltaX / 2);
+                    activeCursor.y = activeCursor.y + (deltaY / 2);
+                    hasMoved = true;
+                }
             }
-        } else if (event.getAction() == MotionEvent.ACTION_UP) {
+        } else if (action == MotionEvent.ACTION_UP) {
             if (!hasMoved || ((System.currentTimeMillis() - tapTimer) < 100)) {
                 activeCursor = possibleCursor;
             }
             hasMoved = false;
         }
 
-        activeCursor = builder.fixPointPosition(activeCursor);
+        activeCursor = builder.adjustPointerPosition(activeCursor);
         lastPoint = new Point((int) event.getX(), (int) event.getY());
         invalidate();
         super.onTouchEvent(event);
