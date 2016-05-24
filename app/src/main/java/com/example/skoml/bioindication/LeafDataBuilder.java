@@ -78,6 +78,10 @@ public class LeafDataBuilder {
         leafMatrix.postTranslate(x, y);
     }
 
+    public void panLeafImage(int x, int y) {
+        leafMatrix.postTranslate(x, y);
+    }
+
     private Point MapPoint(Point p, Boolean inverse) {
         if (p == null) return new Point();
 
