@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.util.Log;
 
 /**
@@ -14,6 +16,7 @@ public class LeafDataBuilder {
     public LeafData leafData = null;
     private DataBuilderState state = null;
     private Context context = null;
+    private Matrix leafMatrix = new Matrix();
 
     public int getDistance(Point a, Point b) {
         int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
@@ -50,6 +53,7 @@ public class LeafDataBuilder {
         this.leafData = leafData;
         this.context = context;
         setState(new TopState());
+        leafMatrix.postTranslate(200, 200);
     }
 
     public void setState(DataBuilderState state) {
@@ -74,8 +78,19 @@ public class LeafDataBuilder {
     }
 
     public void drawState(Canvas canvas) {
-        canvas.drawBitmap(leafData.getImage(), 0, 0, null);
+        canvas.drawBitmap(leafData.getImage(), leafMatrix, null);
         canvas.drawBitmap(state.getStateImage(this), 10, 10, null);
+    }
+
+    private Point MapPoint(Point p) {
+        Matrix inv = new Matrix();
+        leafMatrix.invert(inv);
+        float[] point = {p.x, p.y};
+        inv.mapPoints(point);
+        Point out = new Point();
+        out.x = (int)point[0];
+        out.y = (int)point[1];
+        return out;
     }
 
     public Point getTop() {
@@ -83,7 +98,7 @@ public class LeafDataBuilder {
     }
 
     public void setTop(Point top) {
-        this.leafData.top = top;
+        this.leafData.top = MapPoint(top);
     }
 
     public Point getBottom() {
