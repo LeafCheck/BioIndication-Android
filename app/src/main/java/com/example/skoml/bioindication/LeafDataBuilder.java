@@ -18,13 +18,6 @@ public class LeafDataBuilder {
     private Context context = null;
     private Matrix leafMatrix = new Matrix();
 
-    public int getDistance(Point a, Point b) {
-        int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
-        if ((a.x < b.x) && (a.y < b.y))
-            d = -d;
-        return d;
-    }
-
     public Point getLeafMiddle() {
         if ((getTop() != null) && (getBottom() != null)) {
             Point p = new Point();

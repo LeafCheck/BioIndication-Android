@@ -9,6 +9,20 @@ import android.graphics.Point;
  */
 public class LeafData {
 
+    public class Calculation {
+        public double left;
+        public double right;
+
+        public Calculation(double left, double right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        public double value() {
+            return (left - right) / (left + right);
+        }
+    }
+
     // key points
     public Point top = null;
     public Point bottom = null;
@@ -23,6 +37,10 @@ public class LeafData {
     public Point secondLeftVeinEnd = null;
     public Point secondRightVeinBegin = null;
     public Point secondRightVeinEnd = null;
+
+    public Calculation sideWidth() {
+        return new Calculation(getDistance(center, left), getDistance(center, right));
+    }
 
     private Bitmap leafImage;
 
@@ -42,4 +60,10 @@ public class LeafData {
         return leafImage.getHeight();
     }
 
+    public int getDistance(Point a, Point b) {
+        int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
+        if ((a.x < b.x) && (a.y < b.y))
+            d = -d;
+        return d;
+    }
 }

@@ -83,7 +83,7 @@ abstract class MiddleState extends DataBuilderState {
         if (tmpPoint != null) {
             // fix current point position in the middle of leaf
             Point middle = builder.getLeafMiddle();
-            int distance = builder.getDistance(middle, point);
+            int distance = builder.leafData.getDistance(middle, point);
             return builder.getLeafSidePoint(distance);
         }
         return tmpPoint;
