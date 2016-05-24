@@ -122,18 +122,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
         }
         if (v == retryBtn) {
-            timer.cancel();
-            button.reset();
-            linesDrawer.setVisibility(View.INVISIBLE);
-            parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
-            parentView.findViewById(R.id.retryOrNext).setVisibility(View.INVISIBLE);
-            preview.setVisibility(View.VISIBLE);
-
-            leafData = null;
-            linesDrawer.setLeaf(leafData);
-
-            setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
-            camera.startPreview();
+            Retry();
         }
         if (v == pickBtn) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -153,8 +142,23 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
 
         }
         if (v == nextBtn) {
-            linesDrawer.nextStep();
+            if (!linesDrawer.nextStep()) Retry();
         }
+    }
+
+    private void Retry() {
+        timer.cancel();
+        button.reset();
+        linesDrawer.setVisibility(View.INVISIBLE);
+        parentView.findViewById(R.id.shotOrPick).setVisibility(View.VISIBLE);
+        parentView.findViewById(R.id.retryOrNext).setVisibility(View.INVISIBLE);
+        preview.setVisibility(View.VISIBLE);
+
+        leafData = null;
+        linesDrawer.setLeaf(leafData);
+
+        setCameraDisplayOrientation(getActivity(), Camera.CameraInfo.CAMERA_FACING_BACK, camera);
+        camera.startPreview();
     }
 
 

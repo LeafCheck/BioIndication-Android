@@ -39,7 +39,7 @@ public class LeafData {
     public Point secondRightVeinEnd = null;
 
     public Calculation sideWidth() {
-        return new Calculation(getDistance(center, left), getDistance(center, right));
+        return new Calculation(getPreciseDistance(center, left), getPreciseDistance(center, right));
     }
 
     private Bitmap leafImage;
@@ -65,5 +65,9 @@ public class LeafData {
         if ((a.x < b.x) && (a.y < b.y))
             d = -d;
         return d;
+    }
+
+    public double getPreciseDistance(Point a, Point b) {
+        return Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
     }
 }

@@ -18,7 +18,7 @@ public abstract class DataBuilderState {
         return point;
     }
 
-    public abstract void nextStep(LeafDataBuilder builder);
+    public abstract boolean nextStep(LeafDataBuilder builder);
 
     protected abstract int getStateResourceId();
 
@@ -40,8 +40,9 @@ class TopState extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new BottomState());
+        return true;
     }
 
     @Override
@@ -61,8 +62,9 @@ class BottomState extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new CenterState());
+        return true;
     }
 
     @Override
@@ -101,8 +103,9 @@ class CenterState extends MiddleState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new LeftSide());
+        return true;
     }
 
     @Override
@@ -123,8 +126,9 @@ class LeftSide extends MiddleState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new RightSide());
+        return true;
     }
 
     @Override
@@ -144,8 +148,9 @@ class RightSide extends MiddleState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new FirstLeftVeinBegin());
+        return true;
     }
 
     @Override
@@ -166,8 +171,9 @@ class FirstLeftVeinBegin extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new FirstLeftVeinEnd());
+        return true;
     }
 
     @Override
@@ -187,8 +193,9 @@ class FirstLeftVeinEnd extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new FirstRightVeinBegin());
+        return true;
     }
 
     @Override
@@ -208,8 +215,9 @@ class FirstRightVeinBegin extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new FirstRightVeinEnd());
+        return true;
     }
 
     @Override
@@ -229,8 +237,9 @@ class FirstRightVeinEnd extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new SecondLeftVeinBegin());
+        return true;
     }
 
     @Override
@@ -250,8 +259,9 @@ class SecondLeftVeinBegin extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new SecondLeftVeinEnd());
+        return true;
     }
 
     @Override
@@ -271,8 +281,9 @@ class SecondLeftVeinEnd extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new SecondRightVeinBegin());
+        return true;
     }
 
     @Override
@@ -292,8 +303,9 @@ class SecondRightVeinBegin extends DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
+    public boolean nextStep(LeafDataBuilder builder) {
         builder.setState(new SecondRightVeinEnd());
+        return true;
     }
 
     @Override
@@ -313,8 +325,8 @@ class SecondRightVeinEnd extends  DataBuilderState {
     }
 
     @Override
-    public void nextStep(LeafDataBuilder builder) {
-
+    public boolean nextStep(LeafDataBuilder builder) {
+        return false;
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ecometr.app.R;
 
@@ -105,13 +106,19 @@ public class LinesDrawer extends View {
         return true;
     }
 
-    public void nextStep() {
-        if (activeCursor != null)
-            builder.processPoint(activeCursor);
+    public boolean nextStep() {
+        if (activeCursor != null) {
+            if (!builder.processPoint(activeCursor)) {
+                // finish calculation flow
+                Toast.makeText(LinesDrawer.this.getContext(), "Calculation result: " + leaf.sideWidth().value(), Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
 
         activeCursor = null;
         possibleCursor = null;
         hasMoved = false;
         invalidate();
+        return true;
     }
 }

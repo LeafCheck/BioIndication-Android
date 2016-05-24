@@ -52,9 +52,9 @@ public class LeafDataBuilder {
         this.state = state;
     }
 
-    public void processPoint(Point point) {
+    public boolean processPoint(Point point) {
         state.setPoint(this, point);
-        state.nextStep(this);
+        return state.nextStep(this);
     }
 
     public Bitmap loadImage(int resId) {
