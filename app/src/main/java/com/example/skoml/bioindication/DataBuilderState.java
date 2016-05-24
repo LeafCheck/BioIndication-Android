@@ -1,6 +1,7 @@
 package com.example.skoml.bioindication;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Point;
 
 import com.ecometr.app.R;
@@ -19,13 +20,13 @@ public abstract class DataBuilderState {
 
     public abstract void nextStep(LeafDataBuilder builder);
 
-    public final Bitmap getStateImage(LeafDataBuilder builder) {
+    protected abstract int getStateResourceId();
+
+    public void drawStateImage(LeafDataBuilder builder, Canvas canvas) {
         if (stateImage == null)
             stateImage = builder.loadImage(getStateResourceId());
-        return stateImage;
+        canvas.drawBitmap(stateImage, 10, 10, null);
     }
-
-    protected abstract int getStateResourceId();
 }
 
 /**

@@ -78,7 +78,7 @@ public class LeafDataBuilder {
 
     public void drawState(Canvas canvas) {
         canvas.drawBitmap(leafData.getImage(), leafMatrix, null);
-        canvas.drawBitmap(state.getStateImage(this), 10, 10, null);
+        state.drawStateImage(this, canvas);
     }
 
     public void panLeafImage(int x, int y) {
