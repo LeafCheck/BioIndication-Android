@@ -110,7 +110,7 @@ public class LinesDrawer extends View {
         if (activeCursor != null) {
             if (!builder.processPoint(activeCursor)) {
                 // finish calculation flow
-                Toast.makeText(LinesDrawer.this.getContext(), "Calculation result: " + leaf.sideWidth().value(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LinesDrawer.this.getContext(), "Calculation result: " + leaf.getValue(), Toast.LENGTH_LONG).show();
                 return false;
             }
         }

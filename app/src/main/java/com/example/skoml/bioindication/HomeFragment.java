@@ -555,7 +555,7 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
             final int heightRatio = Math.round((float) height / (float) reqHeight);
             final int widthRatio = Math.round((float) width / (float) reqWidth);
 
-            // Choose the smallest ratio as inSampleSize value, this will guarantee
+            // Choose the smallest ratio as inSampleSize getValue, this will guarantee
             // a final image with both dimensions larger than or equal to the
             // requested height and width.
             inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;

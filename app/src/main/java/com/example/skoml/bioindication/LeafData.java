@@ -1,7 +1,6 @@
 package com.example.skoml.bioindication;
 
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Point;
 
 /**
@@ -18,8 +17,22 @@ public class LeafData {
             this.right = right;
         }
 
-        public double value() {
+        public double getValue() {
             return (left - right) / (left + right);
+        }
+    }
+
+    public class  Line {
+        public Point A = null;
+        public Point B = null;
+
+        public Line(Point A, Point B) {
+            this.A = A;
+            this.B = B;
+        }
+
+        public double length() {
+            return Math.round(Math.sqrt(Math.pow(B.x - A.x, 2) + Math.pow(B.y - A.y, 2)));
         }
     }
 
@@ -39,7 +52,34 @@ public class LeafData {
     public Point secondRightVeinEnd = null;
 
     public Calculation sideWidth() {
-        return new Calculation(getPreciseDistance(center, left), getPreciseDistance(center, right));
+        return new Calculation(new Line(center, left).length(),
+                new Line(center, right).length());
+    }
+
+    public Calculation secondVeinLength() {
+        return new Calculation(new Line(secondLeftVeinBegin,secondLeftVeinEnd).length(),
+                new Line(secondRightVeinBegin, secondRightVeinEnd).length());
+    }
+
+    public Calculation veinBaseDistance() {
+        return new Calculation(new Line(firstLeftVeinBegin, secondLeftVeinBegin).length(),
+                new Line(firstRightVeinBegin, secondRightVeinBegin).length());
+    }
+
+    public Calculation veinEndingDistance() {
+        return new Calculation(new Line(firstLeftVeinEnd, secondLeftVeinEnd).length(),
+                new Line(firstRightVeinEnd, secondRightVeinEnd).length());
+    }
+
+    public Calculation secondVeinAngle() {
+        return new Calculation(getAngle(new Line(secondLeftVeinBegin, secondLeftVeinEnd), new Line(bottom, top)),
+                getAngle(new Line(secondRightVeinBegin, secondRightVeinEnd), new Line(bottom, top)));
+    }
+
+    public double getValue() {
+        return (sideWidth().getValue() + secondVeinLength().getValue() +
+                veinBaseDistance().getValue() + veinEndingDistance().getValue()
+                + secondVeinAngle().getValue()) / 5;
     }
 
     private Bitmap leafImage;
@@ -67,7 +107,9 @@ public class LeafData {
         return d;
     }
 
-    public double getPreciseDistance(Point a, Point b) {
-        return Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
+    public double getAngle(Line line1, Line line2) {
+        double angle1 = Math.toDegrees(Math.atan2(Math.abs(line1.A.y - line1.B.y), Math.abs(line1.A.x - line1.B.x)));
+        double angle2 = Math.toDegrees(Math.atan2(Math.abs(line2.A.y - line2.B.y), Math.abs(line2.A.x - line2.B.x)));
+        return Math.abs(angle1 - angle2);
     }
 }
