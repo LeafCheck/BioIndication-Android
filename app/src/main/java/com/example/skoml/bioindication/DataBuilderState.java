@@ -2,6 +2,11 @@ package com.example.skoml.bioindication;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 
 import com.ecometr.app.R;
@@ -10,7 +15,21 @@ import com.ecometr.app.R;
  * Created by Developer on 5/20/2016.
  */
 public abstract class DataBuilderState {
+
     private Bitmap stateImage = null;
+
+    protected Paint paint = null;
+
+    public DataBuilderState() {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(1);
+        paint.setColor(Color.WHITE);
+        paint.setAlpha(255);
+        paint.setStrokeCap(Paint.Cap.ROUND);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setPathEffect(new DashPathEffect(new float[]{10, 5}, 0));
+    }
 
     public abstract void setPoint(LeafDataBuilder builder, Point point);
 
@@ -26,6 +45,10 @@ public abstract class DataBuilderState {
         if (stateImage == null)
             stateImage = builder.loadImage(getStateResourceId());
         canvas.drawBitmap(stateImage, 10, 10, null);
+    }
+
+    public void drawGuidelines(LeafDataBuilder builder, Canvas canvas) {
+        // do nothing
     }
 }
 
@@ -89,6 +112,20 @@ abstract class MiddleState extends DataBuilderState {
             return builder.getLeafSidePoint(distance);
         }
         return tmpPoint;
+    }
+
+    @Override
+    public void drawGuidelines(LeafDataBuilder builder, Canvas canvas) {
+        super.drawGuidelines(builder, canvas);
+        Path path = new Path();
+        path.moveTo(builder.getTop().x, builder.getTop().y);
+        path.lineTo(builder.getBottom().x, builder.getBottom().y);
+        canvas.drawPath(path, paint);
+
+        Matrix m = new Matrix();
+        m.postRotate(90);
+        path.transform(m);
+        canvas.drawPath(path, paint);
     }
 }
 

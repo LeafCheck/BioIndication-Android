@@ -72,6 +72,7 @@ public class LeafDataBuilder {
     public void drawState(Canvas canvas) {
         canvas.drawBitmap(leafData.getImage(), leafMatrix, null);
         state.drawStateImage(this, canvas);
+        state.drawGuidelines(this, canvas);
     }
 
     public void panLeafImage(int x, int y) {
