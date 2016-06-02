@@ -109,22 +109,25 @@ abstract class MiddleState extends DataBuilderState {
             // fix current point position in the middle of leaf
             Point middle = builder.getLeafMiddle();
             int distance = builder.leafData.getDistance(middle, point);
-            return builder.getLeafSidePoint(distance);
-        }
+            tmpPoint = builder.getLeafSidePoint(distance);
+        };
         return tmpPoint;
     }
 
     @Override
     public void drawGuidelines(LeafDataBuilder builder, Canvas canvas) {
         super.drawGuidelines(builder, canvas);
+        Point middle = builder.getLeafMiddle();
+        Point left = builder.getLeafSidePoint(-100);
+        Point right = builder.getLeafSidePoint(100);
+
         Path path = new Path();
         path.moveTo(builder.getTop().x, builder.getTop().y);
         path.lineTo(builder.getBottom().x, builder.getBottom().y);
-        canvas.drawPath(path, paint);
-
-        Matrix m = new Matrix();
-        m.postRotate(90);
-        path.transform(m);
+        path.moveTo(middle.x, middle.y);
+        path.lineTo(left.x, left.y);
+        path.moveTo(middle.x, middle.y);
+        path.lineTo(right.x, right.y);
         canvas.drawPath(path, paint);
     }
 }

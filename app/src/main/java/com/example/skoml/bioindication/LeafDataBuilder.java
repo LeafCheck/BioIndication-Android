@@ -29,16 +29,16 @@ public class LeafDataBuilder {
     }
 
     public Point getLeafSidePoint(int distance) {
-        double angle;
-        if ((getBottom().x - getTop().x) != 0)
-            angle = Math.atan((getTop().y - getBottom().y) / (getTop().x - getBottom().x)) - (Math.PI / 2);
-        else
-            angle = -(Math.PI / 2);
+        double dx = getBottom().x - getTop().x;
+        double dy = getBottom().y - getTop().y;
+        double length = Math.sqrt(dx * dx + dy * dy);
+        dx /= length;
+        dy /= length;
+        Point m = getLeafMiddle();
 
         Point p = new Point();
-        Point m = getLeafMiddle();
-        p.x = (int) Math.round(m.x + distance * Math.cos(angle));
-        p.y = (int) Math.round(m.y + distance * Math.sin(angle));
+        p.x = (int)Math.round(m.x + dy * distance);
+        p.y = (int)Math.round(m.y - dx * distance);
         return p;
     }
 
@@ -90,8 +90,8 @@ public class LeafDataBuilder {
         float[] point = {p.x, p.y};
         m.mapPoints(point);
         Point out = new Point();
-        out.x = (int)point[0];
-        out.y = (int)point[1];
+        out.x = (int) point[0];
+        out.y = (int) point[1];
         return out;
     }
 
