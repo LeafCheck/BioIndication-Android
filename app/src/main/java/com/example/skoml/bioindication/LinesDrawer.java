@@ -99,7 +99,8 @@ public class LinesDrawer extends View {
             hasMoved = false;
         }
 
-        activeCursor = builder.adjustPointerPosition(activeCursor);
+        if (action != MotionEvent.ACTION_DOWN)
+            activeCursor = builder.adjustPointerPosition(activeCursor);
         lastPoint = new Point((int) event.getX(), (int) event.getY());
         invalidate();
         super.onTouchEvent(event);
