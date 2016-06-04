@@ -53,6 +53,13 @@ public class LinesDrawer extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        float scaleFactor = (float) MeasureSpec.getSize(widthMeasureSpec) / (float)leaf.getWidth();
+        builder.scaleLeafImage(scaleFactor);
+    }
+
+        @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
