@@ -79,6 +79,10 @@ public class LeafDataBuilder {
         leafMatrix.postTranslate(x, y);
     }
 
+    public void scaleLeafImage(float scale) {
+        leafMatrix.postScale(scale, scale);
+    }
+
     private Point MapPoint(Point p, Boolean inverse) {
         if (p == null) return new Point();
 

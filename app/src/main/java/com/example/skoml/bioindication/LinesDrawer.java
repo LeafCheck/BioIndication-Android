@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.support.v4.view.MotionEventCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ public class LinesDrawer extends View {
     private Point lastPoint = null;
     private boolean hasMoved = false;
     private boolean isPanMode = false;
+    private ScaleGestureDetector scaleDetector = null;
 
     public LinesDrawer(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -36,6 +38,17 @@ public class LinesDrawer extends View {
         paint.setAlpha(255);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeJoin(Paint.Join.ROUND);
+
+        scaleDetector = new ScaleGestureDetector(context, new ScaleListener());
+    }
+
+    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            LinesDrawer.this.builder.scaleLeafImage(detector.getScaleFactor());
+            return true;
+        }
     }
 
     public LinesDrawer(Context context, AttributeSet attrs) {
@@ -53,6 +66,13 @@ public class LinesDrawer extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        float scaleFactor = (float) MeasureSpec.getSize(widthMeasureSpec) / (float)leaf.getWidth();
+        builder.scaleLeafImage(scaleFactor);
+    }
+
+        @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
@@ -71,6 +91,7 @@ public class LinesDrawer extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        scaleDetector.onTouchEvent(event);
         int action = MotionEventCompat.getActionMasked(event);
 
         if (action == MotionEvent.ACTION_DOWN) {
