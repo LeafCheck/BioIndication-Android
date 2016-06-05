@@ -102,7 +102,7 @@ public class LeafData {
 
     public int getDistance(Point a, Point b) {
         int d = (int) Math.round(Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)));
-        if ((a.x < b.x) && (a.y < b.y))
+        if (a.x < b.x)
             d = -d;
         return d;
     }

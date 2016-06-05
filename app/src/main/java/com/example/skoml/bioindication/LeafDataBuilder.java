@@ -66,7 +66,7 @@ public class LeafDataBuilder {
     }
 
     public void logPoint(String name, Point point) {
-        Log.v(name, "(" + Integer.toString(point.x) + ", " + Integer.toString(point.y) + ")");
+        Log.i(name, "(" + Integer.toString(point.x) + ", " + Integer.toString(point.y) + ")");
     }
 
     public void drawState(Canvas canvas) {

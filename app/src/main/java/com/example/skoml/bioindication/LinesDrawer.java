@@ -119,7 +119,8 @@ public class LinesDrawer extends View {
                 }
             }
         } else if (action == MotionEvent.ACTION_UP) {
-            if (!hasMoved || ((System.currentTimeMillis() - tapTimer) < 100)) {
+            long timeDiff = System.currentTimeMillis() - tapTimer;
+            if (!hasMoved || (timeDiff < 100)) {
                 activeCursor = possibleCursor;
             }
             hasMoved = false;
