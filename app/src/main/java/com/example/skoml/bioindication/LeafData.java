@@ -18,7 +18,7 @@ public class LeafData {
         }
 
         public double getValue() {
-            return (left - right) / (left + right);
+            return Math.abs(left - right) / (left + right);
         }
     }
 
