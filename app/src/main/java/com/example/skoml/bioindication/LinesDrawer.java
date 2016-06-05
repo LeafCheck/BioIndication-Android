@@ -42,6 +42,11 @@ public class LinesDrawer extends View {
         scaleDetector = new ScaleGestureDetector(context, new ScaleListener());
     }
 
+    public void Rotate() {
+        builder.rotateLeafImage(90);
+        invalidate();
+    }
+
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
 
         @Override

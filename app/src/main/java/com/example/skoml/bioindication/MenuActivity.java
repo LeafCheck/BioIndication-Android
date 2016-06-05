@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.ecometr.app.R;
 import com.special.ResideMenu.ResideMenu;
@@ -46,7 +47,6 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main);
-
 
         setUpMenu();
 
@@ -95,12 +95,14 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
                 resideMenu.openMenu(ResideMenu.DIRECTION_LEFT);
             }
         });
+
         findViewById(R.id.title_bar_right_menu).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resideMenu.openMenu(ResideMenu.DIRECTION_RIGHT);
             }
         });
+
     }
 
     @Override

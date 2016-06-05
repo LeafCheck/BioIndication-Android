@@ -83,6 +83,10 @@ public class LeafDataBuilder {
         leafMatrix.postScale(scale, scale);
     }
 
+    public void rotateLeafImage(float angle) {
+        leafMatrix.postRotate(angle, leafData.getWidth() / 2, leafData.getHeight() / 2);
+    }
+
     private Point MapPoint(Point p, Boolean inverse) {
         if (p == null) return new Point();
 

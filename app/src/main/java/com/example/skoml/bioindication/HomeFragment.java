@@ -73,6 +73,14 @@ public class HomeFragment extends Fragment implements SurfaceHolder.Callback, Vi
         // наше SurfaceView имеет имя SurfaceView01
         preview = (SurfaceView) parentView.findViewById(R.id.SurfaceView01);
 
+        getActivity().findViewById(R.id.title_bar_rotate).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linesDrawer.Rotate();
+            }
+        });
+
+
         surfaceHolder = preview.getHolder();
         surfaceHolder.addCallback(this);
         surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
