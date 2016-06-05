@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.SurfaceHolder;

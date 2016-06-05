@@ -8,6 +8,17 @@ import android.graphics.Point;
  */
 public class LeafData {
 
+    private float scale = 1;
+
+    public LeafData(Bitmap leafImage) {
+        this.leafImage = leafImage;
+        scale = leafImage.getWidth() / 100;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
     public class Calculation {
         public double left;
         public double right;
@@ -52,23 +63,23 @@ public class LeafData {
     public Point secondRightVeinEnd = null;
 
     public Calculation sideWidth() {
-        return new Calculation(new Line(center, left).length(),
-                new Line(center, right).length());
+        return new Calculation(new Line(center, left).length() / scale,
+                new Line(center, right).length() / scale);
     }
 
     public Calculation secondVeinLength() {
-        return new Calculation(new Line(secondLeftVeinBegin,secondLeftVeinEnd).length(),
-                new Line(secondRightVeinBegin, secondRightVeinEnd).length());
+        return new Calculation(new Line(secondLeftVeinBegin,secondLeftVeinEnd).length() / scale,
+                new Line(secondRightVeinBegin, secondRightVeinEnd).length() / scale);
     }
 
     public Calculation veinBaseDistance() {
-        return new Calculation(new Line(firstLeftVeinBegin, secondLeftVeinBegin).length(),
-                new Line(firstRightVeinBegin, secondRightVeinBegin).length());
+        return new Calculation(new Line(firstLeftVeinBegin, secondLeftVeinBegin).length() / scale,
+                new Line(firstRightVeinBegin, secondRightVeinBegin).length() / scale);
     }
 
     public Calculation veinEndingDistance() {
-        return new Calculation(new Line(firstLeftVeinEnd, secondLeftVeinEnd).length(),
-                new Line(firstRightVeinEnd, secondRightVeinEnd).length());
+        return new Calculation(new Line(firstLeftVeinEnd, secondLeftVeinEnd).length() / scale,
+                new Line(firstRightVeinEnd, secondRightVeinEnd).length() / scale);
     }
 
     public Calculation secondVeinAngle() {
@@ -83,10 +94,6 @@ public class LeafData {
     }
 
     private Bitmap leafImage;
-
-    public LeafData(Bitmap leafImage) {
-        this.leafImage = leafImage;
-    }
 
     public Bitmap getImage() {
         return leafImage;

@@ -103,11 +103,21 @@ public class LeafDataBuilder {
         return out;
     }
 
-    private Point getPoint(Point p) {
+    /**
+     * Convert points from bitmap coordinates to screen coordinates
+     * @param p Point in bitmap coordinates
+     * @return Point in screen coordinates
+     */
+    public Point getPoint(Point p) {
         return MapPoint(p, false);
     }
 
-    private Point setPoint(Point p) {
+    /**
+     * Convert points from screen coordinates to bitmap coordinates
+     * @param Point in screen coordinates
+     * @return Point in bitmap coordinates
+     */
+    public Point setPoint(Point p) {
         return MapPoint(p, true);
     }
 

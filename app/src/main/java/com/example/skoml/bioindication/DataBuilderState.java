@@ -4,11 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
-import android.util.Log;
 
 import com.ecometr.app.R;
 
@@ -19,17 +17,28 @@ public abstract class DataBuilderState {
 
     private Bitmap stateImage = null;
 
-    protected Paint paint = null;
+    protected Paint rulerPaint = null;
+    protected Paint gridPaint = null;
+    protected Path grid = null;
 
     public DataBuilderState() {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1);
-        paint.setColor(Color.WHITE);
-        paint.setAlpha(255);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeJoin(Paint.Join.ROUND);
-        paint.setPathEffect(new DashPathEffect(new float[]{10, 5}, 0));
+        rulerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        rulerPaint.setStyle(Paint.Style.STROKE);
+        rulerPaint.setStrokeWidth(1);
+        rulerPaint.setColor(Color.WHITE);
+        rulerPaint.setAlpha(255);
+        rulerPaint.setStrokeCap(Paint.Cap.ROUND);
+        rulerPaint.setStrokeJoin(Paint.Join.ROUND);
+        rulerPaint.setPathEffect(new DashPathEffect(new float[]{10, 5}, 0));
+
+        gridPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        gridPaint.setStyle(Paint.Style.STROKE);
+        gridPaint.setStrokeWidth(1);
+        gridPaint.setColor(Color.WHITE);
+        gridPaint.setAlpha(255);
+        gridPaint.setStrokeCap(Paint.Cap.ROUND);
+        gridPaint.setStrokeJoin(Paint.Join.ROUND);
+        gridPaint.setPathEffect(new DashPathEffect(new float[]{1, 5}, 0));
     }
 
     public abstract void setPoint(LeafDataBuilder builder, Point point);
@@ -49,7 +58,22 @@ public abstract class DataBuilderState {
     }
 
     public void drawGuidelines(LeafDataBuilder builder, Canvas canvas) {
-        // do nothing
+//        if (grid == null) {
+//            grid = new Path();
+//            int width = builder.leafData.getWidth();
+//            int height = builder.leafData.getHeight();
+//            for (int i = 0; i < height; i += builder.leafData.getScale()) {
+//                Point a = builder.getPoint(new Point(0, i));
+//                Point b = builder.getPoint(new Point(width, i));
+//                grid.moveTo(a.x, a.y);
+//                grid.lineTo(b.x, b.y);
+//            }
+//            for (int i = 0; i < width; i += builder.leafData.getScale()) {
+//                grid.moveTo(i, 0);
+//                grid.lineTo(i, height);
+//            }
+//        }
+//        canvas.drawPath(grid, gridPaint);
     }
 }
 
@@ -111,7 +135,8 @@ abstract class MiddleState extends DataBuilderState {
             Point middle = builder.getLeafMiddle();
             int distance = builder.leafData.getDistance(middle, point);
             tmpPoint = builder.getLeafSidePoint(distance);
-        };
+        }
+        ;
         return tmpPoint;
     }
 
@@ -129,7 +154,7 @@ abstract class MiddleState extends DataBuilderState {
         path.lineTo(left.x, left.y);
         path.moveTo(middle.x, middle.y);
         path.lineTo(right.x, right.y);
-        canvas.drawPath(path, paint);
+        canvas.drawPath(path, rulerPaint);
     }
 }
 
@@ -358,7 +383,7 @@ class SecondRightVeinBegin extends DataBuilderState {
 /**
  * 17. User specify ending of second right vein
  */
-class SecondRightVeinEnd extends  DataBuilderState {
+class SecondRightVeinEnd extends DataBuilderState {
 
     @Override
     public void setPoint(LeafDataBuilder builder, Point point) {
